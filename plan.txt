@@ -1,0 +1,18 @@
+Needed Classes:
+    TicTacToeBoard (Model)
+    JSwingView (JSwing desktop interface)
+    TicTacToeGame (Controller / logic)
+
+TicTacToeBoard:
+    Instance Vars:
+        private int boardSize_x
+        private int boardSize_y
+        private Cell[] board
+
+    constructor()
+        Set board with default size of 3x3
+
+    constructor(int, int)
+        Set board with provided sizes int, int
+        -Allowed sizes of 3x3 to 14x14
+
