@@ -10,6 +10,10 @@ public class SuperTicTacToePanel extends JPanel {
     private JButton[][] jButtonsBoard;
     private JButton undo;
     private JButton enable_ai;
+    private ImageIcon xIcon; //Halloween theme?
+    private ImageIcon oIcon; // Halloween theme?
+    private ImageIcon emptyIcon;
+
     public SuperTicTacToePanel() {
         game = new SuperTicTacToeGame();
     }
