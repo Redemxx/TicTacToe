@@ -9,6 +9,10 @@ public class SuperTicTacToeGame {
     // true for player 2, O
     private Boolean current_turn;
 
+    public int getDimension() {
+        return dimension;
+    }
+
     /**
      * Creates a new game-board with default size of 3x3.
      */
@@ -67,6 +71,11 @@ public class SuperTicTacToeGame {
         // TODO: ai_choose()
         //  Method that analyzes board, picks best spot.
         //  Efficient.
+
+        // Calculate position..
+
+        // call select(row, col);
+        // reuse code; don't re-write
     }
 
     public GameStatus getGameStatus() {
