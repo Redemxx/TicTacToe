@@ -1,22 +1,31 @@
 package project1;
 
-public class SuperTicTacToePanel {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-    /*
-    * create grid of *transparent* buttons from getSize() method
-    * display X/O PNGs at the button selected; X if current_turn = false, 0 if current_turn is true
-    * check to ensure X/O isn't already there using getBoard() and checking coords
-    * perform logic checks before image is moved in this class or SuperTicTacToeGame?
-    * use the select() method in SuperTicTacToeGame to move piece images to other grid
-    *
-    * needs undo button to retrace moves from previous gameBoards
-    *
-    * needs file menu in top left
-    * etc
-    *
-    * Extras:
-    * Pre-Game menu to select mode: Player v Player, Player v AI, AI v AI
-    */
+public class SuperTicTacToePanel extends JPanel {
 
+    private SuperTicTacToeGame game;
+    private JButton[][] jButtonsBoard;
+    private JButton undo;
+    private JButton enable_ai;
+    private ImageIcon xIcon; //Halloween theme?
+    private ImageIcon oIcon; // Halloween theme?
+    private ImageIcon emptyIcon;
 
+    public SuperTicTacToePanel() {
+        game = new SuperTicTacToeGame();
+    }
+
+    public SuperTicTacToePanel(SuperTicTacToeGame game) {
+        this.game = game;
+    }
+
+    private class ButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    }
 }
