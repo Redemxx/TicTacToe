@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 public class SuperTicTacToePanel extends JPanel {
 
     private SuperTicTacToeGame game;
-    private JButton cell_buttons;
+    private JButton[][] jButtonsBoard;
     private JButton undo;
     private JButton enable_ai;
     public SuperTicTacToePanel() {
