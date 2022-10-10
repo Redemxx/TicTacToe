@@ -5,6 +5,10 @@ public class SuperTicTacToeGame {
     private GameStatus game_status;
     private Boolean ai_enabled;
 
+    // false for player 1,
+    // true for player 2.
+    private Boolean current_turn;
+
     public SuperTicTacToeGame() {
         game_board = new Cell[3][3];
         instantiateBoard();
