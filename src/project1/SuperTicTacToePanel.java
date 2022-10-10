@@ -13,6 +13,7 @@ public class SuperTicTacToePanel extends JPanel {
     private ImageIcon xIcon;
     private ImageIcon oIcon;
     private ImageIcon emptyIcon;
+
     public SuperTicTacToePanel() {
         game = new SuperTicTacToeGame();
     }
