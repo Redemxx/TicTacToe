@@ -7,11 +7,13 @@ public class SuperTicTacToeGame {
 
     public SuperTicTacToeGame() {
         game_board = new Cell[3][3];
+        instantiateBoard();
         game_status = GameStatus.IN_PROGRESS;
     }
 
     public SuperTicTacToeGame(int size) {
         game_board = new Cell[size][size];
+        instantiateBoard();
     }
 
     private void instantiateBoard() {
