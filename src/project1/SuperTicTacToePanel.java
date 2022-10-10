@@ -1,8 +1,10 @@
 package project1;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class SuperTicTacToePanel {
+public class SuperTicTacToePanel extends JPanel {
 
     private SuperTicTacToeGame game;
     private JButton cell_buttons;
@@ -14,5 +16,12 @@ public class SuperTicTacToePanel {
 
     public SuperTicTacToePanel(SuperTicTacToeGame game) {
         this.game = game;
+    }
+
+    private class ButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
     }
 }

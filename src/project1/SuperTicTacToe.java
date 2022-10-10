@@ -3,10 +3,10 @@ package project1;
 public class SuperTicTacToe {
 
     private SuperTicTacToeGame game;
-    private SuperTicTacToePanel gameWindow;
+    private SuperTicTacToePanel game_panel;
 
     public SuperTicTacToe() {
         game = new SuperTicTacToeGame();
-        gameWindow = new SuperTicTacToePanel(game);
+        game_panel = new SuperTicTacToePanel(game);
     }
 }
