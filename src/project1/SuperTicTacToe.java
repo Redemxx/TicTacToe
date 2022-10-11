@@ -17,5 +17,12 @@ public class SuperTicTacToe {
         moves_history.add(move); // everytime a move is made call this function and add the board first than create the new board.
     }
 
+    public static void main(String[] args) {
+
+
+
+
+    }
+
 
 }
