@@ -13,7 +13,7 @@ public class SuperTicTacToe {
     }
 
     public static void main(String[] args) {
-
+        SuperTicTacToe main_thread = new SuperTicTacToe();
 
 
 
