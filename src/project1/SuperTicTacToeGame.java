@@ -92,6 +92,32 @@ public class SuperTicTacToeGame {
         for (int r = 0; r < check_len; r ++) {
             for (int c = 0; c < check_len; c++) {
                 int sum = checkRowWin(r, c, Cell.EMPTY);
+                if (sum == win_int) {
+                    if (current_turn) {
+                        return GameStatus.X_WON;
+                    }else {
+                        return GameStatus.O_WON;
+                    }
+                }
+
+                sum = checkColWin(r, c, Cell.EMPTY);
+                if (sum == win_int) {
+                    if (current_turn) {
+                        return GameStatus.X_WON;
+                    }else {
+                        return GameStatus.O_WON;
+                    }
+                }
+
+                sum = checkDiagWin(r, c, Cell.EMPTY);
+                if (sum == win_int) {
+                    if (current_turn) {
+                        return GameStatus.X_WON;
+                    }else {
+                        return GameStatus.O_WON;
+                    }
+                }
+
             }
         }
         //        int countO = 0;
