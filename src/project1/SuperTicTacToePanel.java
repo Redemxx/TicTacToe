@@ -1,6 +1,7 @@
 package project1;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class SuperTicTacToePanel extends JPanel {
     private JMenuItem quitItem;
     private JMenuItem undoItem; //Create keyboard shortcut?
     private JMenuItem redoItem; //Create keyboard shortcut?
+    private JButton[][] buttons;
 
     public SuperTicTacToeGame get_game() {
         return this.game;
@@ -67,6 +69,18 @@ public class SuperTicTacToePanel extends JPanel {
         redoItem.addActionListener(new MenuHandler()::actionPerformedC);
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
+
+        this.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+
+        buttons = new JButton[game.getDimension()][game.getDimension()];
+
+        for(int i = 0; i < game.getDimension(); i++){
+            for(int k = 0; k < game.getDimension(); k++){
+
+                buttons[i][k] = new JButton("Pos: " + (i+1) + ", " + (k+1));
+                gui.add(buttons[i][k]);
+            }
+        }
 
         gui.setSize(1100,480);
         gui.setJMenuBar(menus);
