@@ -1,8 +1,8 @@
 package project1;
 
 public class SuperTicTacToeGame {
-    private Cell[][] game_board;
-    private int dimension;
+    private final Cell[][] game_board;
+    private final int dimension;
     private GameStatus game_status;
 
     // false for player 1, X
@@ -25,6 +25,7 @@ public class SuperTicTacToeGame {
 
     /**
      * Creates a new game-board with a given size which corresponds to length and height.
+     *
      * @param size Int length and height of the board.
      */
     public SuperTicTacToeGame(int size) {
@@ -83,6 +84,70 @@ public class SuperTicTacToeGame {
         //  Analyze board for a winner or a draw
         //  Set game_status to status
         //  Return game_status
+        int countO = 0;
+        int countX = 0;
+
+        for (int col = 0; col < game_board.length; col++) { // O horizontal win condition...
+
+            if (game_board[0][col] == Cell.O) { //Maybe a nested for loop to check multiple rows?
+                countO++;
+            }
+            if (game_board[0][col] == Cell.X) {
+                System.out.println("Blocked!");
+                countO = 0;
+            }
+            if (countO == 3) {
+                countO = 0;
+                return game_status = GameStatus.O_WON;
+            }
+        }
+
+        for (int row = 0; row < game_board.length; row++) { // O vertical win condition...
+            if(game_board[row][0] == Cell.O){ //Maybe a nested for loop to check multiple columns?
+                countO++;
+                if(game_board[row][0] == Cell.X){
+                    System.out.println("Blocked!");
+                    countO = 0;
+                }
+                if(countO == 3){
+                    countO = 0;
+                    return game_status = GameStatus.X_WON;
+                }
+                }
+        }
+
+        for (int col = 0; col < game_board.length; col++) { // O diagonal win condition...
+            for(int row = 0; row < game_board.length; row++){
+                if(game_board[row][col] == Cell.O) { //it checks downwards.
+                    countO++;
+                }
+                if(game_board[row][col] == Cell.X){
+                    System.out.println("Blocked!");
+                    countO = 0;
+                }
+                if(countO == 3){
+                    countO = 0;
+                    return game_status = GameStatus.O_WON;
+                }
+
+            }
+
+        }
+
+        for (int col = 0; col < game_board.length; col++) { // X horizontal win condition...
+            if(game_board[0][col] == Cell.X){
+                countX++;
+                if(game_board[0][col] == Cell.O){
+                    System.out.println("Blocked!");
+                    countX = 0;
+                }
+                if(countX == 3){
+                    countX = 0;
+                    return game_status = GameStatus.X_WON;
+                }
+            }
+        }
+
         return game_status;
     }
 }
