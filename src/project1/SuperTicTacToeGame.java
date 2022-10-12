@@ -8,6 +8,7 @@ public class SuperTicTacToeGame {
     // false for player 1, X
     // true for player 2, O
     private Boolean current_turn;
+    private int win_int;
 
     public int getDimension() {
         return dimension;
@@ -19,6 +20,7 @@ public class SuperTicTacToeGame {
     public SuperTicTacToeGame() {
         game_board = new Cell[3][3];
         dimension = 3;
+        win_int = 3;
         instantiateBoard();
         game_status = GameStatus.IN_PROGRESS;
     }
@@ -31,6 +33,7 @@ public class SuperTicTacToeGame {
     public SuperTicTacToeGame(int size) {
         game_board = new Cell[size][size];
         dimension = size;
+        win_int = 3;
         instantiateBoard();
         game_status = GameStatus.IN_PROGRESS;
     }
@@ -84,70 +87,134 @@ public class SuperTicTacToeGame {
         //  Analyze board for a winner or a draw
         //  Set game_status to status
         //  Return game_status
-        int countO = 0;
-        int countX = 0;
 
-        for (int col = 0; col < game_board.length; col++) { // O horizontal win condition...
-
-            if (game_board[0][col] == Cell.O) { //Maybe a nested for loop to check multiple rows?
-                countO++;
-            }
-            if (game_board[0][col] == Cell.X) {
-                System.out.println("Blocked!");
-                countO = 0;
-            }
-            if (countO == 3) {
-                countO = 0;
-                return game_status = GameStatus.O_WON;
+        int check_len = dimension - win_int + 1;
+        for (int r = 0; r < check_len; r ++) {
+            for (int c = 0; c < check_len; c++) {
+                int sum = checkRowWin(r, c, Cell.EMPTY);
             }
         }
-
-        for (int row = 0; row < game_board.length; row++) { // O vertical win condition...
-            if(game_board[row][0] == Cell.O){ //Maybe a nested for loop to check multiple columns?
-                countO++;
-                if(game_board[row][0] == Cell.X){
-                    System.out.println("Blocked!");
-                    countO = 0;
-                }
-                if(countO == 3){
-                    countO = 0;
-                    return game_status = GameStatus.X_WON;
-                }
-                }
-        }
-
-        for (int col = 0; col < game_board.length; col++) { // O diagonal win condition...
-            for(int row = 0; row < game_board.length; row++){
-                if(game_board[row][col] == Cell.O) { //it checks downwards.
-                    countO++;
-                }
-                if(game_board[row][col] == Cell.X){
-                    System.out.println("Blocked!");
-                    countO = 0;
-                }
-                if(countO == 3){
-                    countO = 0;
-                    return game_status = GameStatus.O_WON;
-                }
-
-            }
-
-        }
-
-        for (int col = 0; col < game_board.length; col++) { // X horizontal win condition...
-            if(game_board[0][col] == Cell.X){
-                countX++;
-                if(game_board[0][col] == Cell.O){
-                    System.out.println("Blocked!");
-                    countX = 0;
-                }
-                if(countX == 3){
-                    countX = 0;
-                    return game_status = GameStatus.X_WON;
-                }
-            }
-        }
+        //        int countO = 0;
+        //        int countX = 0;
+        //
+        //        for (int col = 0; col < game_board.length; col++) { // O horizontal win condition...
+        //
+        //            if (game_board[0][col] == Cell.O) { //Maybe a nested for loop to check multiple rows?
+        //                countO++;
+        //            }
+        //            if (game_board[0][col] == Cell.X) {
+        //                System.out.println("Blocked!");
+        //                countO = 0;
+        //            }
+        //            if (countO == 3) {
+        //                countO = 0;
+        //                return game_status = GameStatus.O_WON;
+        //            }
+        //        }
+        //
+        //        for (int row = 0; row < game_board.length; row++) { // O vertical win condition...
+        //            if(game_board[row][0] == Cell.O){ //Maybe a nested for loop to check multiple columns?
+        //                countO++;
+        //                if(game_board[row][0] == Cell.X){
+        //                    System.out.println("Blocked!");
+        //                    countO = 0;
+        //                }
+        //                if(countO == 3){
+        //                    countO = 0;
+        //                    return game_status = GameStatus.X_WON;
+        //                }
+        //                }
+        //        }
+        //
+        //        for (int col = 0; col < game_board.length; col++) { // O diagonal win condition...
+        //            for(int row = 0; row < game_board.length; row++){
+        //                if(game_board[row][col] == Cell.O) { //it checks downwards.
+        //                    countO++;
+        //                }
+        //                if(game_board[row][col] == Cell.X){
+        //                    System.out.println("Blocked!");
+        //                    countO = 0;
+        //                }
+        //                if(countO == 3){
+        //                    countO = 0;
+        //                    return game_status = GameStatus.O_WON;
+        //                }
+        //
+        //            }
+        //
+        //        }
+        //
+        //        for (int col = 0; col < game_board.length; col++) { // X horizontal win condition...
+        //            if(game_board[0][col] == Cell.X){
+        //                countX++;
+        //                if(game_board[0][col] == Cell.O){
+        //                    System.out.println("Blocked!");
+        //                    countX = 0;
+        //                }
+        //                if(countX == 3){
+        //                    countX = 0;
+        //                    return game_status = GameStatus.X_WON;
+        //                }
+        //            }
+        //        }
+        //
+        //        return game_status;
 
         return game_status;
+    }
+
+    private int checkRowWin(int row, int col, Cell cell) {
+        if (row >= dimension || col >= dimension) {
+            return 0;
+        }
+
+        if (cell == Cell.EMPTY) {
+            cell = game_board[row][col];
+            if (cell == Cell.EMPTY)
+                return 0;
+        }
+
+        Cell current_spot = game_board[row][col];
+        if (current_spot == cell) {
+            return 1 + checkRowWin(row, col+1, cell);
+        }else {
+            return 0;
+        }
+    }
+
+    private int checkColWin(int row, int col, Cell cell) {
+        if (row >= dimension || col >= dimension) {
+            return 0;
+        }
+        if (cell == Cell.EMPTY) {
+            cell = game_board[row][col];
+            if (cell == Cell.EMPTY)
+                return 0;
+        }
+
+        Cell current_spot = game_board[row][col];
+        if (current_spot == cell) {
+            return 1 + checkRowWin(row+1, col, cell);
+        }else {
+            return 0;
+        }
+    }
+
+    private int checkDiagWin(int row, int col, Cell cell) {
+        if (row >= dimension || col >= dimension) {
+            return 0;
+        }
+        if (cell == Cell.EMPTY) {
+            cell = game_board[row][col];
+            if (cell == Cell.EMPTY)
+                return 0;
+        }
+
+        Cell current_spot = game_board[row][col];
+        if (current_spot == cell) {
+            return 1 + checkRowWin(row+1, col+1, cell);
+        }else {
+            return 0;
+        }
     }
 }

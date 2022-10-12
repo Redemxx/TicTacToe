@@ -75,12 +75,14 @@ public class SuperTicTacToePanel extends JPanel {
 
     private int getSizeInput(String message) {
         int input_size = 0;
+
+        // Attempt to get size of board from user
         try {
             while (input_size <= 2 || input_size >= 15  ) {
                 String s = (String) JOptionPane.showInputDialog(null, message);
                 input_size = Integer.parseInt(s);
             }
-        }catch (Exception e) {
+        }catch (Exception e) { // Default to 3 if user inputs invalid size or closes window
             input_size = 3;
         }
         return input_size;
