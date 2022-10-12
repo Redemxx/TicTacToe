@@ -41,9 +41,12 @@ public class SuperTicTacToePanel extends JPanel {
         //OUR-GUI-NAME.add(menuBar);
     }
 
+    public SuperTicTacToeGame get_game() {
+        return this.game;
+    }
     public SuperTicTacToePanel() {
         String s = getInput("Enter desired size of the TicTacToe board:");
-        game = new SuperTicTacToeGame(Integer.getInteger(s));
+        game = new SuperTicTacToeGame(Integer.parseInt(s));
     }
 
     public SuperTicTacToePanel(SuperTicTacToeGame game) {
@@ -70,7 +73,7 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     private String getInput(String message) {
-        return (String)JOptionPane.showInputDialog(gui, message);
+        return (String)JOptionPane.showInputDialog(message);
     }
 
     private class ButtonListener implements ActionListener {
