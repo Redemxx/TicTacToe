@@ -70,7 +70,7 @@ public class SuperTicTacToePanel extends JPanel {
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
 
-        this.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+        gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
 
         buttons = new JButton[game.getDimension()][game.getDimension()];
 
