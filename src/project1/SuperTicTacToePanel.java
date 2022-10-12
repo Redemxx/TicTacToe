@@ -3,10 +3,12 @@ package project1;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class SuperTicTacToePanel extends JPanel {
 
     private SuperTicTacToeGame game;
+    private ArrayList<SuperTicTacToeGame> moves_history;
     private JButton[][] jButtonsBoard;
     private JButton undo;
     private JButton enable_ai;
