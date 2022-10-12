@@ -79,6 +79,7 @@ public class SuperTicTacToePanel extends JPanel {
 
                 buttons[i][k] = new JButton("Pos: " + (i+1) + ", " + (k+1));
                 gui.add(buttons[i][k]);
+                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
             }
         }
 
