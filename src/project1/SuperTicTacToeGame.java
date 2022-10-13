@@ -15,6 +15,10 @@ public class SuperTicTacToeGame {
         return dimension;
     }
 
+    public boolean getTurn(){
+        return current_turn;
+    }
+
     /**
      * Creates a new game-board with default size of 3x3.
      */
