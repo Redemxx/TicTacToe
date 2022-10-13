@@ -8,6 +8,7 @@ public class SuperTicTacToeGame {
     // false for player 1, X
     // true for player 2, O
     private Boolean current_turn;
+    private int placed;
     private int win_int;
 
     public int getDimension() {
@@ -42,6 +43,7 @@ public class SuperTicTacToeGame {
         Called from constructors; sets all cells in game_board to Cell.EMPTY
      */
     private void instantiateBoard() {
+        placed = 0;
         current_turn = false;
         for (int a = 0; a < game_board.length; a++) {
             for (int b = 0; b < game_board[0].length; b++) {
@@ -60,6 +62,7 @@ public class SuperTicTacToeGame {
         // Sets the currently active player in the selected spot.
         game_board[row][col] = current_turn ? Cell.O : Cell.X;
         current_turn = !current_turn;
+        ++placed;
     }
 
     public Cell[][] getboard() {
@@ -147,6 +150,10 @@ public class SuperTicTacToeGame {
                     }
                 }
             }
+        }
+
+        if (game_status == GameStatus.IN_PROGRESS && (placed == dimension*dimension)) {
+            game_status = GameStatus.CATS;
         }
 
         //        int countO = 0;
