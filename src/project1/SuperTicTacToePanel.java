@@ -121,10 +121,14 @@ public class SuperTicTacToePanel extends JPanel {
                         jButtonsBoard[a][b].setName(String.valueOf(cnt));
                     }
                 if (cells[a][b] == Cell.X) {
-                    jButtonsBoard[cnt / dim][cnt % dim].setIcon(xIcon);
+                    jButtonsBoard[cnt / dim][cnt % dim].setIcon(
+                            new ImageIcon(xIcon.getImage().getScaledInstance(
+                                    jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
                 }
                 if (cells[a][b] == Cell.O) {
-                    jButtonsBoard[cnt / dim][cnt % dim].setIcon(oIcon);
+                    jButtonsBoard[cnt / dim][cnt % dim].setIcon(
+                            new ImageIcon(oIcon.getImage().getScaledInstance(
+                            jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
                 }
                 ++cnt;
             }
