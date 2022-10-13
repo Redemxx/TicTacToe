@@ -115,8 +115,11 @@ public class SuperTicTacToePanel extends JPanel {
         int dim = game.getDimension();
         for (int a = 0; a < dim; a++) {
             for (int b = 0; b < dim; b++) {
-//                if (cells[a][b] == Cell.EMPTY)
-//                    continue;
+                if (cells[a][b] == Cell.EMPTY)
+                    jButtonsBoard[cnt / dim][cnt % dim].setIcon(emptyIcon);
+                    if (jButtonsBoard[a][b].getName() == "-1") {
+                        jButtonsBoard[a][b].setName(String.valueOf(cnt));
+                    }
                 if (cells[a][b] == Cell.X) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(xIcon);
                 }
@@ -126,6 +129,23 @@ public class SuperTicTacToePanel extends JPanel {
                 ++cnt;
             }
         }
+
+        GameStatus gameStatus = game.getGameStatus();
+        if (gameStatus != GameStatus.IN_PROGRESS) {
+            showStatus(gameStatus);
+            game.reset();
+            updateBoard();
+        }
+    }
+
+    private void showStatus(GameStatus statuus) {
+        if (statuus == GameStatus.O_WON) {
+            JOptionPane.showMessageDialog(null, "Player O won!");
+        } else if (statuus == GameStatus.X_WON) {
+            JOptionPane.showMessageDialog(null, "Player X won!");
+        }else if (statuus == GameStatus.CATS) {
+            JOptionPane.showMessageDialog(null, "No winners, it's a Tie!");
+        }
     }
 
     private class ButtonListener implements ActionListener {
@@ -134,9 +154,13 @@ public class SuperTicTacToePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton)e.getSource();
             int cmd = Integer.parseInt(source.getName());
+            if (cmd == -1){
+                return;
+            }
             int row = cmd / game.getDimension();
             int col = cmd % game.getDimension();
 
+            jButtonsBoard[row][col].setName("-1");
             game.select(row, col);
             updateBoard();
         }

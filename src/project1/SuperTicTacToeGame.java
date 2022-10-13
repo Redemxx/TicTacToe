@@ -67,9 +67,9 @@ public class SuperTicTacToeGame {
     }
 
     public void reset() {
-        instantiateBoard();
         current_turn = false;
         game_status = GameStatus.IN_PROGRESS;
+        instantiateBoard();
     }
 
     public void ai_choose() {
@@ -90,7 +90,9 @@ public class SuperTicTacToeGame {
         //  Return game_status
 
         int check_len = dimension - win_int + 1;
-        for (int r = 0; r < check_len; r ++) {
+
+        // Checker for rows
+        for (int r = 0; r < dimension; r++) {
             for (int c = 0; c < check_len; c++) {
                 int sum = checkRowWin(r, c, Cell.EMPTY);
                 if (sum >= win_int) {
@@ -100,17 +102,13 @@ public class SuperTicTacToeGame {
                         return GameStatus.O_WON;
                     }
                 }
+            }
+        }
 
-                sum = checkColWin(r, c, Cell.EMPTY);
-                if (sum >= win_int) {
-                    if (current_turn) {
-                        return GameStatus.X_WON;
-                    }else {
-                        return GameStatus.O_WON;
-                    }
-                }
-
-                sum = checkDiagWin(r, c, Cell.EMPTY);
+        // Checker for cols
+        for (int r = 0; r < check_len; r++) {
+            for (int c = 0; c < dimension; c++) {
+                int sum = checkColWin(r, c, Cell.EMPTY);
                 if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
@@ -121,6 +119,36 @@ public class SuperTicTacToeGame {
 
             }
         }
+
+        // Checker for right diags
+        for (int r = 0; r < check_len; r++) {
+            for (int c = 0; c < check_len; c++) {
+                int sum = checkDiagWin(r, c, Cell.EMPTY);
+                if (sum >= win_int) {
+                    if (current_turn) {
+                        return GameStatus.X_WON;
+                    }else {
+                        return GameStatus.O_WON;
+                    }
+                }
+            }
+        }
+
+        // Checker for left diags
+        // Checker for right diags
+        for (int r = 0; r < check_len; r++) {
+            for (int c = 0; c < check_len; c++) {
+                int sum = checkLDiagWin(r, (dimension - 1) - c, Cell.EMPTY);
+                if (sum >= win_int) {
+                    if (current_turn) {
+                        return GameStatus.X_WON;
+                    }else {
+                        return GameStatus.O_WON;
+                    }
+                }
+            }
+        }
+
         //        int countO = 0;
         //        int countX = 0;
         //
@@ -221,7 +249,7 @@ public class SuperTicTacToeGame {
 
         Cell current_spot = game_board[row][col];
         if (current_spot == cell) {
-            return 1 + checkRowWin(row+1, col, cell);
+            return 1 + checkColWin(row+1, col, cell);
         }else {
             return 0;
         }
@@ -239,7 +267,25 @@ public class SuperTicTacToeGame {
 
         Cell current_spot = game_board[row][col];
         if (current_spot == cell) {
-            return 1 + checkRowWin(row+1, col+1, cell);
+            return 1 + checkDiagWin(row+1, col+1, cell);
+        }else {
+            return 0;
+        }
+    }
+
+    private int checkLDiagWin(int row, int col, Cell cell) {
+        if (row >= dimension || col >= dimension) {
+            return 0;
+        }
+        if (cell == Cell.EMPTY) {
+            cell = game_board[row][col];
+            if (cell == Cell.EMPTY)
+                return 0;
+        }
+
+        Cell current_spot = game_board[row][col];
+        if (current_spot == cell) {
+            return 1 + checkLDiagWin(row+1, col-1, cell);
         }else {
             return 0;
         }
