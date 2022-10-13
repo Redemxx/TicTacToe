@@ -42,6 +42,7 @@ public class SuperTicTacToeGame {
         Called from constructors; sets all cells in game_board to Cell.EMPTY
      */
     private void instantiateBoard() {
+        current_turn = false;
         for (int a = 0; a < game_board.length; a++) {
             for (int b = 0; b < game_board[0].length; b++) {
                 game_board[a][b] = Cell.EMPTY;
@@ -92,7 +93,7 @@ public class SuperTicTacToeGame {
         for (int r = 0; r < check_len; r ++) {
             for (int c = 0; c < check_len; c++) {
                 int sum = checkRowWin(r, c, Cell.EMPTY);
-                if (sum == win_int) {
+                if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
                     }else {
@@ -101,7 +102,7 @@ public class SuperTicTacToeGame {
                 }
 
                 sum = checkColWin(r, c, Cell.EMPTY);
-                if (sum == win_int) {
+                if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
                     }else {
@@ -110,7 +111,7 @@ public class SuperTicTacToeGame {
                 }
 
                 sum = checkDiagWin(r, c, Cell.EMPTY);
-                if (sum == win_int) {
+                if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
                     }else {

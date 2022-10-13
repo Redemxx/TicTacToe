@@ -14,6 +14,8 @@ public class SuperTicTacToePanel extends JPanel {
     private JButton[][] jButtonsBoard;
     private JButton undo;
     private JButton enable_ai;
+    private Cell[][] cells;
+    private ButtonListener buttonListener;
     private ImageIcon xIcon;
     private ImageIcon oIcon;
     private ImageIcon emptyIcon;
@@ -40,6 +42,7 @@ public class SuperTicTacToePanel extends JPanel {
         xIcon = new ImageIcon(getClass().getResource("x.png"));
         oIcon = new ImageIcon(getClass().getResource("o.png"));
         emptyIcon = new ImageIcon();
+        buttonListener = new ButtonListener();
 
         gui = new JFrame("TicTacToe");
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,14 +67,24 @@ public class SuperTicTacToePanel extends JPanel {
         int s = game.getDimension();
         jButtonsBoard = new JButton[s][s];
 
-        for (JButton[] a : jButtonsBoard) {
-            for (JButton b : a) {
-                b = new JButton("", emptyIcon);
-                b.addActionListener(new ButtonListener());
+        int cnt = 0;
+        for (int a = 0; a < jButtonsBoard.length; a++) {
+            for (int b = 0; b < jButtonsBoard[0].length; b++) {
+                jButtonsBoard[a][b] = new JButton("", emptyIcon);
+                jButtonsBoard[a][b].addActionListener(buttonListener);
+                jButtonsBoard[a][b].setName(String.valueOf(cnt));
 //                gui.add(buttons[i][k]);
 //                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
-                gui.add(b);
-                b.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+                gui.add(jButtonsBoard[a][b]);
+                jButtonsBoard[a][b].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+                ++cnt;
+            }
+        }
+
+        cells = new Cell[s][s];
+        for (int a = 0; a < cells.length; a++) {
+            for (int b = 0; b < cells[0].length; b++) {
+                cells[a][b] = Cell.EMPTY;
             }
         }
 
@@ -95,14 +108,37 @@ public class SuperTicTacToePanel extends JPanel {
         return input_size;
     }
 
+    private void updateBoard() {
+        cells = game.getboard();
+
+        int cnt = 0;
+        int dim = game.getDimension();
+        for (int a = 0; a < dim; a++) {
+            for (int b = 0; b < dim; b++) {
+//                if (cells[a][b] == Cell.EMPTY)
+//                    continue;
+                if (cells[a][b] == Cell.X) {
+                    jButtonsBoard[cnt / dim][cnt % dim].setIcon(xIcon);
+                }
+                if (cells[a][b] == Cell.O) {
+                    jButtonsBoard[cnt / dim][cnt % dim].setIcon(oIcon);
+                }
+                ++cnt;
+            }
+        }
+    }
+
     private class ButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String cmd = e.getActionCommand();
-            switch (cmd) {
-//                case condition -> code;
-            }
+            JButton source = (JButton)e.getSource();
+            int cmd = Integer.parseInt(source.getName());
+            int row = cmd / game.getDimension();
+            int col = cmd % game.getDimension();
+
+            game.select(row, col);
+            updateBoard();
         }
     }
 }
