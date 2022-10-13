@@ -7,6 +7,7 @@ public class MenuHandler implements ActionListener {
 
     public void actionPerformed(ActionEvent eventA) {
         // ActionListener for QUIT button
+        System.exit(0);
     }
 
 
