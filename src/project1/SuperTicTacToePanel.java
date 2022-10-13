@@ -22,7 +22,6 @@ public class SuperTicTacToePanel extends JPanel {
     private JMenuItem quitItem;
     private JMenuItem undoItem; //Create keyboard shortcut?
     private JMenuItem redoItem; //Create keyboard shortcut?
-    private JButton[][] buttons;
 
     public SuperTicTacToeGame get_game() {
         return this.game;
@@ -38,19 +37,9 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     private void instantiateInstance() {
-//        xIcon = new ImageIcon("x.png");
-//        oIcon = new ImageIcon("o.jpg");
+        xIcon = new ImageIcon(getClass().getResource("x.png"));
+        oIcon = new ImageIcon(getClass().getResource("o.png"));
         emptyIcon = new ImageIcon();
-
-        int s = game.getDimension();
-        jButtonsBoard = new JButton[s][s];
-
-        for (JButton[] a : jButtonsBoard) {
-            for (JButton b : a) {
-                b = new JButton("", emptyIcon);
-                b.addActionListener(new ButtonListener());
-            }
-        }
 
         gui = new JFrame("TicTacToe");
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,18 +61,21 @@ public class SuperTicTacToePanel extends JPanel {
 
         gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
 
-        buttons = new JButton[game.getDimension()][game.getDimension()];
+        int s = game.getDimension();
+        jButtonsBoard = new JButton[s][s];
 
-        for(int i = 0; i < game.getDimension(); i++){
-            for(int k = 0; k < game.getDimension(); k++){
-
-                buttons[i][k] = new JButton("Pos: " + (i+1) + ", " + (k+1));
-                gui.add(buttons[i][k]);
-                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+        for (JButton[] a : jButtonsBoard) {
+            for (JButton b : a) {
+                b = new JButton("", emptyIcon);
+                b.addActionListener(new ButtonListener());
+//                gui.add(buttons[i][k]);
+//                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+                gui.add(b);
+                b.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
             }
         }
 
-        gui.setSize(1100,480);
+        gui.setSize(800,800);
         gui.setJMenuBar(menus);
         gui.setVisible(true);
     }
