@@ -61,7 +61,7 @@ public class SuperTicTacToePanel extends JPanel {
         quitItem.addActionListener(buttonListener::actionPerformed_quit);
 //        undoItem.addActionListener(new MenuHandler()::actionPerformedB);
         undoItem.addActionListener(buttonListener::actionPerformed_undo);
-        redoItem.addActionListener(new MenuHandler()::actionPerformedC);
+//        redoItem.addActionListener(new MenuHandler()::actionPerformedC);
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
 
