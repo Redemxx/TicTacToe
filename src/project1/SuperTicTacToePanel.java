@@ -201,7 +201,6 @@ public class SuperTicTacToePanel extends JPanel {
 
         // Gets win-length input from user
         try {
-
             while( input_winLength <= 3 || input_winLength > boardSize) {
                 String s = (String) JOptionPane.showInputDialog(null, message);
                 input_winLength = Integer.parseInt(s);
