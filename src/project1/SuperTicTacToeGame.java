@@ -127,8 +127,8 @@ public class SuperTicTacToeGame {
 
         while(!foundSpot) { // not true until it finds a spot that is empty.
 
-            int randomRow = (int) (Math.random() * (dimension + 1)); //only gets spots in the dimension of the board.
-            int randomCol = (int) (Math.random() * (dimension + 1)); //only get spots in the dimension of the board.
+            int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.
+            int randomCol = (int) (Math.random() * (dimension)); //only get spots in the dimension of the board.
 
             Cell[][] tempChoices = choices.getboard(); //creates a temp board.
 
