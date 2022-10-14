@@ -104,6 +104,9 @@ public class SuperTicTacToePanel extends JPanel {
         try {
             while (input_size <= 2 || input_size >= 15  ) {
                 String s = (String) JOptionPane.showInputDialog(null, message);
+                if (s == null) {
+                    System.exit(0);
+                }
                 input_size = Integer.parseInt(s);
             }
         }catch (Exception e) { // Default to 3 if user inputs invalid size or closes window
@@ -134,6 +137,10 @@ public class SuperTicTacToePanel extends JPanel {
             for (int b = 0; b < dim; b++) {
                 if (cells[a][b] == Cell.EMPTY) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(emptyIcon);
+
+                    // Resets the board to be clickable again after a restart;
+                    // where all the buttons would have the name -1 because they were
+                    // used in the previous game.
                     if (jButtonsBoard[a][b].getName().equals("-1")) {
                         jButtonsBoard[a][b].setName(String.valueOf(cnt));
                     }
