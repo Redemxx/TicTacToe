@@ -22,6 +22,8 @@ public class SuperTicTacToeGame {
         return current_turn;
     }
 
+//    public void get_ai
+
     /**
      * Creates a new game-board with default size of 3x3.
      */

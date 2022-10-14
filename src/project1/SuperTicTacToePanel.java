@@ -227,6 +227,12 @@ public class SuperTicTacToePanel extends JPanel {
     private void displayBoard() {
         cells = game.getboard();
 
+        if(game.getTurn()){
+            playerTurn.setText("O's turn");
+        } else{
+            playerTurn.setText("X's turn");
+        }
+
         int cnt = 0;
         int dim = game.getDimension();
         for (int a = 0; a < dim; a++) {
@@ -308,6 +314,8 @@ public class SuperTicTacToePanel extends JPanel {
             // ActionListener for ENABLE AI button
 
             // insert ai code enabler
+
+
         }
         public void actionPerformed_size(ActionEvent e) {
             // ActionListener for changing board size
