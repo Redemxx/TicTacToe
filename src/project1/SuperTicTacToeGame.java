@@ -58,12 +58,18 @@ public class SuperTicTacToeGame {
      *
      * @param size Int length and height of the board.
      */
-    public SuperTicTacToeGame(int size) {
+    public SuperTicTacToeGame(int size, String turn) {
         game_board = new Cell[size][size];
         dimension = size;
         win_int = 3;
         instantiateBoard();
         game_status = GameStatus.IN_PROGRESS;
+
+        if(turn.toLowerCase().equals("x")){
+            current_turn = false;
+        } else{
+            current_turn = true;
+        }
     }
 
     /*
