@@ -301,27 +301,26 @@ public class SuperTicTacToePanel extends JPanel {
         }
 
 //        checkAiPlay();
-        new Thread(() -> {
-            int player = current_player ? 1 : 0;
-            if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
-                try{
-                    Thread.sleep(1000);
-                }catch (Exception e) {
-
-                }
-
-                moves_history.add(new SuperTicTacToeGame(game));
-
-                if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
-                    game.ai_choose();
-                else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_TWO)
-                    game.connor_choose();
-                current_player = !current_player;
-                displayBoard();
-
-
-            }
-        }).start();
+        //            int player = current_player ? 1 : 0;
+        //            if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
+        //                try{
+        //                    Thread.sleep(1000);
+        //                }catch (Exception e) {
+        //
+        //                }
+        //
+        //                moves_history.add(new SuperTicTacToeGame(game));
+        //
+        //                if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
+        //                    game.ai_choose();
+        //                else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_TWO)
+        //                    game.connor_choose();
+        //                current_player = !current_player;
+        //                displayBoard();
+        //
+        //
+        //            }
+        new Thread(this::checkAiPlay).start();
     }
 
     private void showStatus(GameStatus statuus) {
@@ -338,11 +337,11 @@ public class SuperTicTacToePanel extends JPanel {
 
         int player = current_player ? 1 : 0;
         if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
-//            try{
-//                Thread.sleep(1000);
-//            }catch (Exception e) {
-//
-//            }
+            try{
+                Thread.sleep(500);
+            }catch (Exception e) {
+
+            }
 
             moves_history.add(new SuperTicTacToeGame(game));
 
@@ -369,11 +368,14 @@ public class SuperTicTacToePanel extends JPanel {
             int row = cmd / game.getDimension();
             int col = cmd % game.getDimension();
 
-            moves_history.add(new SuperTicTacToeGame(game));
-            jButtonsBoard[row][col].setName("-1");
-            game.select(row, col);
-            current_player = !current_player;
-            displayBoard();
+            int player = current_player ? 1 : 0;
+            if (ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
+                moves_history.add(new SuperTicTacToeGame(game));
+                jButtonsBoard[row][col].setName("-1");
+                game.select(row, col);
+                current_player = !current_player;
+                displayBoard();
+            }
         }
 
         public void actionPerformed_undo(ActionEvent e) {
