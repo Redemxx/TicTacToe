@@ -25,6 +25,7 @@ public class SuperTicTacToePanel extends JPanel {
     private JMenuItem undoItem; //Create keyboard shortcut?
     private JMenuItem redoItem; //Create keyboard shortcut?
     private JPanel game_panel;
+    private JLabel playerTurn;
 
     public SuperTicTacToeGame get_game() {
         return this.game;
@@ -53,6 +54,9 @@ public class SuperTicTacToePanel extends JPanel {
         gui = new JFrame("TicTacToe");
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        undo = new JButton("Undo!");
+        enable_ai = new JButton("Enable AI!");
+
         fileMenu = new JMenu("File");
         quitItem = new JMenuItem("Quit!");
         undoItem = new JMenuItem("Undo!");
@@ -66,6 +70,10 @@ public class SuperTicTacToePanel extends JPanel {
 //        undoItem.addActionListener(new MenuHandler()::actionPerformedB);
         undoItem.addActionListener(buttonListener::actionPerformed_undo);
 //        redoItem.addActionListener(new MenuHandler()::actionPerformedC);
+
+        undo.addActionListener(buttonListener::actionPerformed_undo);
+        enable_ai.addActionListener(buttonListener::actionPerformed_enableai);
+
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
 
@@ -128,8 +136,28 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
+        /**gui.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        game_panel.setSize(800, 800);
+        gui.add(game_panel, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        gui.add(undo, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        gui.add(enable_ai, c);
+         **/
+        // add button panel for buttons
+
         gui.add(game_panel);
-        gui.setSize(800,800);
+        gui.setSize(800,900);
         gui.setJMenuBar(menus);
         gui.setVisible(true);
     }
@@ -264,5 +292,10 @@ public class SuperTicTacToePanel extends JPanel {
             System.exit(0);
         }
 
+        public void actionPerformed_enableai(ActionEvent eventA) {
+            // ActionListener for ENABLE AI button
+
+            // insert ai code enabler
+        }
     }
 }
