@@ -29,7 +29,8 @@ public class SuperTicTacToePanel extends JPanel {
         return this.game;
     }
     public SuperTicTacToePanel() {
-        game = new SuperTicTacToeGame(getSizeInput("Enter desired size of the TicTacToe board:"));
+        game = new SuperTicTacToeGame(getSizeInput("Enter desired size of the TicTacToe board:"),
+                getFirstTurn("Who starts first? X or O"));
         instantiateInstance();
     }
 
@@ -109,6 +110,19 @@ public class SuperTicTacToePanel extends JPanel {
             input_size = 3;
         }
         return input_size;
+    }
+
+    private String getFirstTurn(String message) {
+        String input_turn = "";
+
+        // Gets first turn input from user
+        try {
+            String s = (String) JOptionPane.showInputDialog(null, message);
+            input_turn = s;
+        } catch (Exception e) { // Default turn is X if no input or window is closed
+            input_turn = "x";
+        }
+        return input_turn;
     }
 
     private void displayBoard() {
