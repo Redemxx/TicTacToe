@@ -3,21 +3,21 @@ package project1;
 import java.lang.reflect.Array;
 
 public class SuperTicTacToeGame {
-    private Cell[][] game_board;
-    private int dimension;
+    private final Cell[][] game_board;
+    private final int dimension;
     private GameStatus game_status;
 
     // false for player 1, X
     // true for player 2, O
     private Boolean current_turn;
     private int placed;
-    private int win_int;
+    private final int win_int;
 
     public int getDimension() {
         return dimension;
     }
 
-    public boolean getTurn(){
+    public boolean getTurn() {
         return current_turn;
     }
 
@@ -111,7 +111,29 @@ public class SuperTicTacToeGame {
 
         // call select(row, col);
         // reuse code; don't re-write
+
+
+        SuperTicTacToeGame choices = new SuperTicTacToeGame(this);
+
+
+        boolean foundSpot = false;
+
+        while(!foundSpot) {
+            int randomRow = (int) (Math.random() * (dimension + 1));
+            int randomCol = (int) (Math.random() * (dimension + 1));
+
+            Cell[][] tempChoices = choices.getboard();
+
+            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) {
+                select(randomRow, randomCol);
+                foundSpot = true;
+            }
+        }
+
     }
+
+
+
 
     public GameStatus getGameStatus() {
         // TODO: getGameStatus()
@@ -128,7 +150,7 @@ public class SuperTicTacToeGame {
                 if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
-                    }else {
+                    } else {
                         return GameStatus.O_WON;
                     }
                 }
@@ -142,7 +164,7 @@ public class SuperTicTacToeGame {
                 if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
-                    }else {
+                    } else {
                         return GameStatus.O_WON;
                     }
                 }
@@ -157,7 +179,7 @@ public class SuperTicTacToeGame {
                 if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
-                    }else {
+                    } else {
                         return GameStatus.O_WON;
                     }
                 }
@@ -172,14 +194,14 @@ public class SuperTicTacToeGame {
                 if (sum >= win_int) {
                     if (current_turn) {
                         return GameStatus.X_WON;
-                    }else {
+                    } else {
                         return GameStatus.O_WON;
                     }
                 }
             }
         }
 
-        if (game_status == GameStatus.IN_PROGRESS && (placed == dimension*dimension)) {
+        if (game_status == GameStatus.IN_PROGRESS && (placed == dimension * dimension)) {
             game_status = GameStatus.CATS;
         }
 
@@ -265,8 +287,8 @@ public class SuperTicTacToeGame {
 
         Cell current_spot = game_board[row][col];
         if (current_spot == cell) {
-            return 1 + checkRowWin(row, col+1, cell);
-        }else {
+            return 1 + checkRowWin(row, col + 1, cell);
+        } else {
             return 0;
         }
     }
@@ -283,8 +305,8 @@ public class SuperTicTacToeGame {
 
         Cell current_spot = game_board[row][col];
         if (current_spot == cell) {
-            return 1 + checkColWin(row+1, col, cell);
-        }else {
+            return 1 + checkColWin(row + 1, col, cell);
+        } else {
             return 0;
         }
     }
@@ -301,8 +323,8 @@ public class SuperTicTacToeGame {
 
         Cell current_spot = game_board[row][col];
         if (current_spot == cell) {
-            return 1 + checkDiagWin(row+1, col+1, cell);
-        }else {
+            return 1 + checkDiagWin(row + 1, col + 1, cell);
+        } else {
             return 0;
         }
     }
@@ -319,8 +341,8 @@ public class SuperTicTacToeGame {
 
         Cell current_spot = game_board[row][col];
         if (current_spot == cell) {
-            return 1 + checkLDiagWin(row+1, col-1, cell);
-        }else {
+            return 1 + checkLDiagWin(row + 1, col - 1, cell);
+        } else {
             return 0;
         }
     }
