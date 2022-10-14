@@ -1,8 +1,10 @@
 package project1;
 
+import java.lang.reflect.Array;
+
 public class SuperTicTacToeGame {
-    private final Cell[][] game_board;
-    private final int dimension;
+    private Cell[][] game_board;
+    private int dimension;
     private GameStatus game_status;
 
     // false for player 1, X
@@ -28,6 +30,27 @@ public class SuperTicTacToeGame {
         win_int = 3;
         instantiateBoard();
         game_status = GameStatus.IN_PROGRESS;
+    }
+
+    public SuperTicTacToeGame(SuperTicTacToeGame game) {
+        dimension = game.dimension;
+        game_board = new Cell[dimension][dimension];
+        Cell[][] temp_cells = game.getboard();
+        for (int a = 0; a < game_board.length; a++) {
+            for (int b = 0; b < game_board[0].length; b++) {
+                if (temp_cells[a][b] == Cell.EMPTY)
+                    game_board[a][b] = Cell.EMPTY;
+                else if (temp_cells[a][b] == Cell.X)
+                    game_board[a][b] = Cell.X;
+                else if (temp_cells[a][b] == Cell.O)
+                    game_board[a][b] = Cell.O;
+            }
+        }
+
+        win_int = game.win_int;
+        game_status = game.game_status;
+        placed = game.placed;
+        current_turn = game.current_turn;
     }
 
     /**
@@ -285,7 +308,7 @@ public class SuperTicTacToeGame {
     }
 
     private int checkLDiagWin(int row, int col, Cell cell) {
-        if (row >= dimension || col >= dimension) {
+        if (row >= dimension || col < 0) {
             return 0;
         }
         if (cell == Cell.EMPTY) {

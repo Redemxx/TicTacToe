@@ -44,6 +44,8 @@ public class SuperTicTacToePanel extends JPanel {
         emptyIcon = new ImageIcon();
         buttonListener = new ButtonListener();
 
+        moves_history = new ArrayList<SuperTicTacToeGame>();
+
         gui = new JFrame("TicTacToe");
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -57,7 +59,8 @@ public class SuperTicTacToePanel extends JPanel {
         fileMenu.add(redoItem);
 
         quitItem.addActionListener(new MenuHandler());
-        undoItem.addActionListener(new MenuHandler()::actionPerformedB);
+//        undoItem.addActionListener(new MenuHandler()::actionPerformedB);
+        undoItem.addActionListener(buttonListener::actionPerformed_undo);
         redoItem.addActionListener(new MenuHandler()::actionPerformedC);
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
@@ -115,11 +118,12 @@ public class SuperTicTacToePanel extends JPanel {
         int dim = game.getDimension();
         for (int a = 0; a < dim; a++) {
             for (int b = 0; b < dim; b++) {
-                if (cells[a][b] == Cell.EMPTY)
+                if (cells[a][b] == Cell.EMPTY) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(emptyIcon);
-                    if (jButtonsBoard[a][b].getName() == "-1") {
+                    if (jButtonsBoard[a][b].getName().equals("-1")) {
                         jButtonsBoard[a][b].setName(String.valueOf(cnt));
                     }
+                }
                 if (cells[a][b] == Cell.X) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(
                             new ImageIcon(xIcon.getImage().getScaledInstance(
@@ -164,9 +168,19 @@ public class SuperTicTacToePanel extends JPanel {
             int row = cmd / game.getDimension();
             int col = cmd % game.getDimension();
 
+            moves_history.add(new SuperTicTacToeGame(game));
             jButtonsBoard[row][col].setName("-1");
             game.select(row, col);
             updateBoard();
         }
+
+        public void actionPerformed_undo(ActionEvent e) {
+            if (moves_history.size() == 0)
+                return;
+            game = moves_history.get(moves_history.size()-1);
+            moves_history.remove(moves_history.size()-1);
+            updateBoard();
+        }
+
     }
 }
