@@ -265,6 +265,8 @@ public class SuperTicTacToePanel extends JPanel {
             for (int b = 0; b < dim; b++) {
                 if (cells[a][b] == Cell.EMPTY) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(emptyIcon);
+//                    jButtonsBoard[cnt / dim][cnt % dim].updateUI();
+
 
                     // Resets the board to be clickable again after a restart;
                     // where all the buttons would have the name -1 because they were
@@ -277,11 +279,13 @@ public class SuperTicTacToePanel extends JPanel {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(
                             new ImageIcon(xIcon.getImage().getScaledInstance(
                                     jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
+//                    jButtonsBoard[cnt / dim][cnt % dim].updateUI();
                 }
                 if (cells[a][b] == Cell.O) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(
                             new ImageIcon(oIcon.getImage().getScaledInstance(
                             jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
+//                    jButtonsBoard[cnt / dim][cnt % dim].updateUI();
                 }
                 ++cnt;
             }
@@ -291,10 +295,33 @@ public class SuperTicTacToePanel extends JPanel {
         if (gameStatus != GameStatus.IN_PROGRESS) {
             showStatus(gameStatus);
             game.reset();
+            ai_states = new SuperTicTacToeGame.ai_type[] {SuperTicTacToeGame.ai_type.NONE,
+                    SuperTicTacToeGame.ai_type.NONE};
             displayBoard();
         }
 
-        checkAiPlay();
+//        checkAiPlay();
+        new Thread(() -> {
+            int player = current_player ? 1 : 0;
+            if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
+                try{
+                    Thread.sleep(1000);
+                }catch (Exception e) {
+
+                }
+
+                moves_history.add(new SuperTicTacToeGame(game));
+
+                if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
+                    game.ai_choose();
+                else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_TWO)
+                    game.connor_choose();
+                current_player = !current_player;
+                displayBoard();
+
+
+            }
+        }).start();
     }
 
     private void showStatus(GameStatus statuus) {
@@ -308,6 +335,7 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     private void checkAiPlay() {
+
         int player = current_player ? 1 : 0;
         if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
 //            try{
@@ -315,6 +343,7 @@ public class SuperTicTacToePanel extends JPanel {
 //            }catch (Exception e) {
 //
 //            }
+
             moves_history.add(new SuperTicTacToeGame(game));
 
             if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
