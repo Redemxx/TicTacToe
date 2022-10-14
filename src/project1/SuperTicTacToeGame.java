@@ -128,8 +128,8 @@ public class SuperTicTacToeGame {
         boolean foundSpot = false;
 
         while(!foundSpot) {
-            int randomRow = (int) (Math.random() * (dimension + 1));
-            int randomCol = (int) (Math.random() * (dimension + 1));
+            int randomRow = (int) (Math.random() * (dimension));
+            int randomCol = (int) (Math.random() * (dimension));
 
             Cell[][] tempChoices = choices.getboard();
 
