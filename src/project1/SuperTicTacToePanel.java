@@ -24,12 +24,16 @@ public class SuperTicTacToePanel extends JPanel {
     private JMenuItem quitItem;
     private JMenuItem undoItem; //Create keyboard shortcut?
     private JMenuItem redoItem; //Create keyboard shortcut?
+    private JPanel game_panel;
 
     public SuperTicTacToeGame get_game() {
         return this.game;
     }
     public SuperTicTacToePanel() {
-        game = new SuperTicTacToeGame(getSizeInput("Enter desired size of the TicTacToe board:"));
+        int size = getSizeInput("Enter desired size of the TicTacToe board:");
+        String turn = getFirstTurn("Who starts first? X or O");
+        int winLength = getWinLength("How many in a row for a win?", size);
+        game = new SuperTicTacToeGame(size, turn, winLength);
         instantiateInstance();
     }
 
@@ -65,12 +69,24 @@ public class SuperTicTacToePanel extends JPanel {
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
 
-        gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+        game_panel = new JPanel();
+//        gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+        game_panel.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+
 
         int s = game.getDimension();
         jButtonsBoard = new JButton[s][s];
 
         int cnt = 0;
+
+        // Border size vars
+        int top = 0;
+        int left = 0;
+        int bottom = 0;
+        int right = 0;
+
+        int border_width = (int) (6 - (game.getDimension() - 3 ) * 0.25);
+
         for (int a = 0; a < jButtonsBoard.length; a++) {
             for (int b = 0; b < jButtonsBoard[0].length; b++) {
                 jButtonsBoard[a][b] = new JButton("", emptyIcon);
@@ -78,8 +94,29 @@ public class SuperTicTacToePanel extends JPanel {
                 jButtonsBoard[a][b].setName(String.valueOf(cnt));
 //                gui.add(buttons[i][k]);
 //                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
-                gui.add(jButtonsBoard[a][b]);
-                jButtonsBoard[a][b].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+                game_panel.add(jButtonsBoard[a][b]);
+//                jButtonsBoard[a][b].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+                if (a == 0)
+                    top = 0;
+                else
+                    top = border_width;
+
+                if (b == 0)
+                    left = 0;
+                else
+                    left = border_width;
+
+                if (a == game.getDimension()-1)
+                    bottom = 0;
+                else
+                    bottom = border_width;
+
+                if (b == game.getDimension()-1)
+                    right = 0;
+                else
+                    right = border_width;
+
+                jButtonsBoard[a][b].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
                 ++cnt;
             }
         }
@@ -91,6 +128,7 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
+        gui.add(game_panel);
         gui.setSize(800,800);
         gui.setJMenuBar(menus);
         gui.setVisible(true);
@@ -103,12 +141,47 @@ public class SuperTicTacToePanel extends JPanel {
         try {
             while (input_size <= 2 || input_size >= 15  ) {
                 String s = (String) JOptionPane.showInputDialog(null, message);
+                if (s == null) {
+                    System.exit(0);
+                }
                 input_size = Integer.parseInt(s);
             }
         }catch (Exception e) { // Default to 3 if user inputs invalid size or closes window
             input_size = 3;
         }
         return input_size;
+    }
+
+    private String getFirstTurn(String message) {
+        String input_turn = "";
+
+        // Gets first turn input from user
+        try {
+            String s = (String) JOptionPane.showInputDialog(null, message);
+            input_turn = s;
+        } catch (Exception e) { // Default turn is X if no input or window is closed
+            input_turn = "x";
+        }
+        return input_turn;
+    }
+
+    private int getWinLength(String message, int boardSize) {
+        int input_winLength = 0;
+
+        // if boardSize is 3, then win length is 3 by default
+        if(boardSize == 3) return 3;
+
+        // Gets win-length input from user
+        try {
+
+            while( input_winLength <= 3 || input_winLength > boardSize) {
+                String s = (String) JOptionPane.showInputDialog(null, message);
+                input_winLength = Integer.parseInt(s);
+            }
+        } catch (Exception e) { // Default win length is 4 if board size is greater than 3
+            input_winLength = 4;
+        }
+        return input_winLength;
     }
 
     private void displayBoard() {
@@ -120,6 +193,10 @@ public class SuperTicTacToePanel extends JPanel {
             for (int b = 0; b < dim; b++) {
                 if (cells[a][b] == Cell.EMPTY) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(emptyIcon);
+
+                    // Resets the board to be clickable again after a restart;
+                    // where all the buttons would have the name -1 because they were
+                    // used in the previous game.
                     if (jButtonsBoard[a][b].getName().equals("-1")) {
                         jButtonsBoard[a][b].setName(String.valueOf(cnt));
                     }

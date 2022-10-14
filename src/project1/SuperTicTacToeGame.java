@@ -1,5 +1,6 @@
 package project1;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 
 public class SuperTicTacToeGame {
@@ -58,12 +59,20 @@ public class SuperTicTacToeGame {
      *
      * @param size Int length and height of the board.
      */
-    public SuperTicTacToeGame(int size) {
+    public SuperTicTacToeGame(int size, String turn, int winLength) {
         game_board = new Cell[size][size];
         dimension = size;
-        win_int = 3;
+        win_int = winLength;
         instantiateBoard();
         game_status = GameStatus.IN_PROGRESS;
+
+        if(turn.toLowerCase().equals("x")){
+            current_turn = false;
+        } else if(turn.toLowerCase().equals("o")){
+            current_turn = true;
+        } else{
+            JOptionPane.showMessageDialog(null, "Turn defaulted to player X");
+        }
     }
 
     /*
