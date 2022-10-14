@@ -29,8 +29,10 @@ public class SuperTicTacToePanel extends JPanel {
         return this.game;
     }
     public SuperTicTacToePanel() {
-        game = new SuperTicTacToeGame(getSizeInput("Enter desired size of the TicTacToe board:"),
-                getFirstTurn("Who starts first? X or O"));
+        int size = getSizeInput("Enter desired size of the TicTacToe board:");
+        String turn = getFirstTurn("Who starts first? X or O");
+        int winLength = getWinLength("How many in a row for a win?", size);
+        game = new SuperTicTacToeGame(size, turn, winLength);
         instantiateInstance();
     }
 
@@ -126,6 +128,25 @@ public class SuperTicTacToePanel extends JPanel {
             input_turn = "x";
         }
         return input_turn;
+    }
+
+    private int getWinLength(String message, int boardSize) {
+        int input_winLength = 0;
+
+        // if boardSize is 3, then win length is 3 by default
+        if(boardSize == 3) return 3;
+
+        // Gets win-length input from user
+        try {
+
+            while( input_winLength <= 3 || input_winLength > boardSize) {
+                String s = (String) JOptionPane.showInputDialog(null, message);
+                input_winLength = Integer.parseInt(s);
+            }
+        } catch (Exception e) { // Default win length is 4 if board size is greater than 3
+            input_winLength = 4;
+        }
+        return input_winLength;
     }
 
     private void displayBoard() {
