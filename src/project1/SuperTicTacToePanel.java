@@ -24,6 +24,7 @@ public class SuperTicTacToePanel extends JPanel {
     private JMenuItem quitItem;
     private JMenuItem undoItem; //Create keyboard shortcut?
     private JMenuItem redoItem; //Create keyboard shortcut?
+    private JPanel game_panel;
 
     public SuperTicTacToeGame get_game() {
         return this.game;
@@ -68,7 +69,10 @@ public class SuperTicTacToePanel extends JPanel {
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
 
-        gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+        game_panel = new JPanel();
+//        gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+        game_panel.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+
 
         int s = game.getDimension();
         jButtonsBoard = new JButton[s][s];
@@ -90,7 +94,7 @@ public class SuperTicTacToePanel extends JPanel {
                 jButtonsBoard[a][b].setName(String.valueOf(cnt));
 //                gui.add(buttons[i][k]);
 //                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
-                gui.add(jButtonsBoard[a][b]);
+                game_panel.add(jButtonsBoard[a][b]);
 //                jButtonsBoard[a][b].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
                 if (a == 0)
                     top = 0;
@@ -124,6 +128,7 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
+        gui.add(game_panel);
         gui.setSize(800,800);
         gui.setJMenuBar(menus);
         gui.setVisible(true);
