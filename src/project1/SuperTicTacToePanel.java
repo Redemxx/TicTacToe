@@ -6,11 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class SuperTicTacToePanel extends JPanel {
 
     private SuperTicTacToeGame game;
+    private boolean current_player;
+    private SuperTicTacToeGame.ai_type[] ai_states;
     private ArrayList<SuperTicTacToeGame> moves_history;
     private JFrame gui;
     private JButton[][] jButtonsBoard;
@@ -53,6 +56,7 @@ public class SuperTicTacToePanel extends JPanel {
         buttonListener = new ButtonListener();
 
         moves_history = new ArrayList<SuperTicTacToeGame>();
+        current_player = false;
 
         gui = new JFrame("TicTacToe");
         gui.setLayout(new GridLayout(1, 2));
@@ -173,6 +177,7 @@ public class SuperTicTacToePanel extends JPanel {
         gui.setJMenuBar(menus);
         gui.setVisible(true);
 
+        ai_states = new SuperTicTacToeGame.ai_type[] {SuperTicTacToeGame.ai_type.NONE, SuperTicTacToeGame.ai_type.NONE};
     }
 
     private int getSizeInput(String message) {
@@ -224,6 +229,27 @@ public class SuperTicTacToePanel extends JPanel {
         return input_winLength;
     }
 
+    private SuperTicTacToeGame.ai_type getAiType(String message) {
+        int type;
+        // Gets win-length input from user
+        try {
+                type = (int)
+                        JOptionPane.showOptionDialog(null, message, "Choose AI",
+                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon(),
+                                new String[]{"AI_ONE", "AI_TWO", "AI_THREE"}, "AI_ONE");
+        } catch (Exception e) { // Default win length is 4 if board size is greater than 3
+            type = 4;
+        }
+        SuperTicTacToeGame.ai_type return_type = SuperTicTacToeGame.ai_type.NONE;
+        switch (type) {
+            case 0 -> return_type = SuperTicTacToeGame.ai_type.AI_ONE;
+            case 1 -> return_type = SuperTicTacToeGame.ai_type.AI_TWO;
+            case 2 -> return_type = SuperTicTacToeGame.ai_type.AI_THREE;
+            case 3 -> return_type = SuperTicTacToeGame.ai_type.NONE;
+        }
+        return return_type;
+    }
+
     private void displayBoard() {
         cells = game.getboard();
 
@@ -267,6 +293,8 @@ public class SuperTicTacToePanel extends JPanel {
             game.reset();
             displayBoard();
         }
+
+        checkAiPlay();
     }
 
     private void showStatus(GameStatus statuus) {
@@ -276,6 +304,25 @@ public class SuperTicTacToePanel extends JPanel {
             JOptionPane.showMessageDialog(null, "Player X won!");
         }else if (statuus == GameStatus.CATS) {
             JOptionPane.showMessageDialog(null, "No winners, it's a Tie!");
+        }
+    }
+
+    private void checkAiPlay() {
+        int player = current_player ? 1 : 0;
+        if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
+//            try{
+//                Thread.sleep(1000);
+//            }catch (Exception e) {
+//
+//            }
+            moves_history.add(new SuperTicTacToeGame(game));
+
+            if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
+                game.ai_choose();
+            current_player = !current_player;
+            displayBoard();
+
+
         }
     }
 
@@ -294,6 +341,7 @@ public class SuperTicTacToePanel extends JPanel {
             moves_history.add(new SuperTicTacToeGame(game));
             jButtonsBoard[row][col].setName("-1");
             game.select(row, col);
+            current_player = !current_player;
             displayBoard();
         }
 
@@ -315,7 +363,18 @@ public class SuperTicTacToePanel extends JPanel {
 
             // insert ai code enabler
 
+//            game.set_ai(!game.get_ai());
+//            displayBoard();
 
+            SuperTicTacToeGame.ai_type type = getAiType("Choose an ai type");
+
+            if (current_player) {
+                ai_states[1] = type;
+            }else{
+                ai_states[0] = type;
+            }
+
+            displayBoard();
         }
         public void actionPerformed_size(ActionEvent e) {
             // ActionListener for changing board size

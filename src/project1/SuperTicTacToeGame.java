@@ -13,6 +13,7 @@ public class SuperTicTacToeGame {
     private Boolean current_turn;
     private int placed;
     private final int win_int;
+    private boolean ai;
 
     public int getDimension() {
         return dimension;
@@ -22,7 +23,13 @@ public class SuperTicTacToeGame {
         return current_turn;
     }
 
-//    public void get_ai
+    public boolean get_ai() {
+        return ai;
+    }
+
+    public void set_ai(boolean state) {
+        ai = state;
+    }
 
     /**
      * Creates a new game-board with default size of 3x3.
@@ -54,6 +61,7 @@ public class SuperTicTacToeGame {
         game_status = game.game_status;
         placed = game.placed;
         current_turn = game.current_turn;
+        ai = false;
     }
 
     /**
@@ -67,6 +75,7 @@ public class SuperTicTacToeGame {
         win_int = winLength;
         instantiateBoard();
         game_status = GameStatus.IN_PROGRESS;
+        ai = false;
 
         if(turn.toLowerCase().equals("x")){
             current_turn = false;
@@ -355,5 +364,12 @@ public class SuperTicTacToeGame {
         } else {
             return 0;
         }
+    }
+
+    public enum ai_type {
+        AI_ONE,
+        AI_TWO,
+        AI_THREE,
+        NONE
     }
 }
