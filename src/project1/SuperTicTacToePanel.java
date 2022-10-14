@@ -25,7 +25,7 @@ public class SuperTicTacToePanel extends JPanel {
     private JMenuBar menuBar = new JMenuBar();
     private JMenuItem quitItem;
     private JMenuItem undoItem; //Create keyboard shortcut?
-    private JMenuItem redoItem; //Create keyboard shortcut?
+    private JMenuItem changeSizeItem;
     private JPanel game_panel;
     private JPanel button_panel;
     private JLabel playerTurn;
@@ -70,16 +70,16 @@ public class SuperTicTacToePanel extends JPanel {
         fileMenu = new JMenu("File");
         quitItem = new JMenuItem("Quit!");
         undoItem = new JMenuItem("Undo!");
-        redoItem = new JMenuItem("Redo!");
+        changeSizeItem = new JMenuItem("Change Board Size?");
 
         fileMenu.add(quitItem);
         fileMenu.add(undoItem);
-        fileMenu.add(redoItem);
+        fileMenu.add(changeSizeItem);
 
         quitItem.addActionListener(buttonListener::actionPerformed_quit);
 //        undoItem.addActionListener(new MenuHandler()::actionPerformedB);
         undoItem.addActionListener(buttonListener::actionPerformed_undo);
-//        redoItem.addActionListener(new MenuHandler()::actionPerformedC);
+        changeSizeItem.addActionListener(buttonListener::actionPerformed_size);
 
         undo.addActionListener(buttonListener::actionPerformed_undo);
         enable_ai.addActionListener(buttonListener::actionPerformed_enableai);
@@ -299,15 +299,21 @@ public class SuperTicTacToePanel extends JPanel {
             displayBoard();
         }
 
-        public void actionPerformed_quit(ActionEvent eventA) {
+        public void actionPerformed_quit(ActionEvent e) {
             // ActionListener for QUIT button
             System.exit(0);
         }
 
-        public void actionPerformed_enableai(ActionEvent eventA) {
+        public void actionPerformed_enableai(ActionEvent e) {
             // ActionListener for ENABLE AI button
 
             // insert ai code enabler
+        }
+        public void actionPerformed_size(ActionEvent e) {
+            // ActionListener for changing board size
+
+            gui.dispose();
+            game = new SuperTicTacToePanel().get_game();
         }
     }
 }
