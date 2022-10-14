@@ -27,6 +27,7 @@ public class SuperTicTacToePanel extends JPanel {
     private JMenuItem undoItem; //Create keyboard shortcut?
     private JMenuItem redoItem; //Create keyboard shortcut?
     private JPanel game_panel;
+    private JPanel button_panel;
     private JLabel playerTurn;
 
     public SuperTicTacToeGame get_game() {
@@ -54,10 +55,17 @@ public class SuperTicTacToePanel extends JPanel {
         moves_history = new ArrayList<SuperTicTacToeGame>();
 
         gui = new JFrame("TicTacToe");
+        gui.setLayout(new GridLayout(1, 2));
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         undo = new JButton("Undo!");
         enable_ai = new JButton("Enable AI!");
+
+        if(game.getTurn()){
+            playerTurn = new JLabel("O's turn");
+        } else{
+            playerTurn = new JLabel("X's Turn");
+        }
 
         fileMenu = new JMenu("File");
         quitItem = new JMenuItem("Quit!");
@@ -82,7 +90,28 @@ public class SuperTicTacToePanel extends JPanel {
         game_panel = new JPanel();
 //        gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
         game_panel.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
+        game_panel.setPreferredSize(new Dimension(500, 500));
 
+        button_panel = new JPanel();
+        button_panel.setLayout(new GridBagLayout());
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        button_panel.add(undo, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        button_panel.add(enable_ai, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 2;
+        button_panel.add(playerTurn, c);
+        button_panel.setPreferredSize(new Dimension(100, 500));
+//      button_panel size should be adjusted further
 
         int s = game.getDimension();
         jButtonsBoard = new JButton[s][s];
@@ -138,28 +167,9 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
-        /**gui.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.gridy = 0;
-        game_panel.setSize(800, 800);
-        gui.add(game_panel, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.gridy = 1;
-        gui.add(undo, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 1;
-        c.gridy = 1;
-        gui.add(enable_ai, c);
-         **/
-        // add button panel for buttons
-
+        gui.add(button_panel);
         gui.add(game_panel);
-        gui.setSize(800,900);
+        gui.pack();
         gui.setJMenuBar(menus);
         gui.setVisible(true);
 
