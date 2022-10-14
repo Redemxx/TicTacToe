@@ -151,6 +151,80 @@ public class SuperTicTacToeGame {
 
     }
 
+    public void connor_choose() {
+
+        int check_len = dimension - win_int + 1;
+        boolean foundSpot = false;
+        SuperTicTacToeGame choices = new SuperTicTacToeGame(this);
+        Cell[][] tempChoices = choices.getboard();
+
+        // creating the choice
+
+        // check if opponent is 1 away in rows
+        for (int r = 0; r < dimension; r++) {
+            for (int c = 0; c < check_len; c++) {
+                int sum = checkRowWin(r, c, Cell.EMPTY);
+                if (sum >= win_int - 1) {
+                    // make selection
+                    if (tempChoices[r + win_int][c] == Cell.EMPTY) {
+                        select(r + win_int, c);
+
+                    }
+                    if (tempChoices[r - win_int][c] == Cell.EMPTY) {
+                        select(r - win_int, c);
+
+                    }
+                }
+            }
+        }
+
+        // check if opponent is 1 away in cols
+        for (int r = 0; r < check_len; r++) {
+            for (int c = 0; c < dimension; c++) {
+                int sum = checkRowWin(r, c, Cell.EMPTY);
+                if (sum >= win_int - 1) {
+                    // make selection
+                    if (tempChoices[r][c + win_int] == Cell.EMPTY) {
+                        select(r, c + win_int);
+
+                    }
+                    if (tempChoices[r][c - win_int] == Cell.EMPTY) {
+                        select(r, c - win_int);
+
+                    }
+                }
+            }
+        }
+
+        /**
+        // check if opponent is 1 away in diags
+        for (int r = 0; r < check_len; r++) {
+            for (int c = 0; c < check_len; c++) {
+                int sum = checkRowWin(r, c, Cell.EMPTY);
+                if (sum >= win_int - 1) {
+                    // make selection
+                    if (tempChoices[r][c] == Cell.EMPTY) {
+                        select(r, c);
+
+                    }
+                }
+            }
+        }
+        **/
+
+        // if nothing to block, picks randomly
+        while(!foundSpot) { // not true until it finds a spot that is empty.
+
+            int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.
+            int randomCol = (int) (Math.random() * (dimension)); //only get spots in the dimension of the board.
+
+            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
+                select(randomRow, randomCol); //select spot!
+                foundSpot = true; //found spot!
+            }
+        }
+    }
+
 
 
 
