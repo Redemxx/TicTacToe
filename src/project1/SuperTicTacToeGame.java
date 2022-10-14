@@ -1,5 +1,6 @@
 package project1;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 
 public class SuperTicTacToeGame {
@@ -67,8 +68,10 @@ public class SuperTicTacToeGame {
 
         if(turn.toLowerCase().equals("x")){
             current_turn = false;
-        } else{
+        } else if(turn.toLowerCase().equals("o")){
             current_turn = true;
+        } else{
+            JOptionPane.showMessageDialog(null, "Turn defaulted to player X");
         }
     }
 
