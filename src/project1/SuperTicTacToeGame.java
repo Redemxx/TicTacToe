@@ -121,21 +121,20 @@ public class SuperTicTacToeGame {
         // call select(row, col);
         // reuse code; don't re-write
 
+        SuperTicTacToeGame choices = new SuperTicTacToeGame(this); //create a board to access choices without messing with current board.
 
-        SuperTicTacToeGame choices = new SuperTicTacToeGame(this);
+        boolean foundSpot = false; // created a boolean for while loop so ai can exit safely.
 
+        while(!foundSpot) { // not true until it finds a spot that is empty.
 
-        boolean foundSpot = false;
+            int randomRow = (int) (Math.random() * (dimension + 1)); //only gets spots in the dimension of the board.
+            int randomCol = (int) (Math.random() * (dimension + 1)); //only get spots in the dimension of the board.
 
-        while(!foundSpot) {
-            int randomRow = (int) (Math.random() * (dimension + 1));
-            int randomCol = (int) (Math.random() * (dimension + 1));
+            Cell[][] tempChoices = choices.getboard(); //creates a temp board.
 
-            Cell[][] tempChoices = choices.getboard();
-
-            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) {
-                select(randomRow, randomCol);
-                foundSpot = true;
+            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
+                select(randomRow, randomCol); //select spot!
+                foundSpot = true; //found spot!
             }
         }
 
