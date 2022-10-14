@@ -74,6 +74,15 @@ public class SuperTicTacToePanel extends JPanel {
         jButtonsBoard = new JButton[s][s];
 
         int cnt = 0;
+
+        // Border size vars
+        int top = 0;
+        int left = 0;
+        int bottom = 0;
+        int right = 0;
+
+        int border_width = (int) (6 - (game.getDimension() - 3 ) * 0.25);
+
         for (int a = 0; a < jButtonsBoard.length; a++) {
             for (int b = 0; b < jButtonsBoard[0].length; b++) {
                 jButtonsBoard[a][b] = new JButton("", emptyIcon);
@@ -82,7 +91,28 @@ public class SuperTicTacToePanel extends JPanel {
 //                gui.add(buttons[i][k]);
 //                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
                 gui.add(jButtonsBoard[a][b]);
-                jButtonsBoard[a][b].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+//                jButtonsBoard[a][b].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+                if (a == 0)
+                    top = 0;
+                else
+                    top = border_width;
+
+                if (b == 0)
+                    left = 0;
+                else
+                    left = border_width;
+
+                if (a == game.getDimension()-1)
+                    bottom = 0;
+                else
+                    bottom = border_width;
+
+                if (b == game.getDimension()-1)
+                    right = 0;
+                else
+                    right = border_width;
+
+                jButtonsBoard[a][b].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
                 ++cnt;
             }
         }
