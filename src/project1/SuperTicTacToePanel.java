@@ -111,7 +111,7 @@ public class SuperTicTacToePanel extends JPanel {
         return input_size;
     }
 
-    private void updateBoard() {
+    private void displayBoard() {
         cells = game.getboard();
 
         int cnt = 0;
@@ -142,7 +142,7 @@ public class SuperTicTacToePanel extends JPanel {
         if (gameStatus != GameStatus.IN_PROGRESS) {
             showStatus(gameStatus);
             game.reset();
-            updateBoard();
+            displayBoard();
         }
     }
 
@@ -171,7 +171,7 @@ public class SuperTicTacToePanel extends JPanel {
             moves_history.add(new SuperTicTacToeGame(game));
             jButtonsBoard[row][col].setName("-1");
             game.select(row, col);
-            updateBoard();
+            displayBoard();
         }
 
         public void actionPerformed_undo(ActionEvent e) {
@@ -179,7 +179,7 @@ public class SuperTicTacToePanel extends JPanel {
                 return;
             game = moves_history.get(moves_history.size()-1);
             moves_history.remove(moves_history.size()-1);
-            updateBoard();
+            displayBoard();
         }
 
         public void actionPerformed_quit(ActionEvent eventA) {
