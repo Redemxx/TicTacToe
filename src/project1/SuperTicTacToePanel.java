@@ -130,6 +130,7 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
+        game_panel.setSize(800,800);
         gui.add(game_panel);
         gui.setSize(800,800);
         gui.setJMenuBar(menus);
@@ -142,7 +143,7 @@ public class SuperTicTacToePanel extends JPanel {
 
         // Attempt to get size of board from user
         try {
-            while (input_size <= 2 || input_size >= 15  ) {
+            while (input_size <= 2 || input_size >= 150  ) {
                 String s = (String) JOptionPane.showInputDialog(null, message);
                 if (s == null) {
                     System.exit(0);
@@ -176,7 +177,6 @@ public class SuperTicTacToePanel extends JPanel {
 
         // Gets win-length input from user
         try {
-
             while( input_winLength <= 3 || input_winLength > boardSize) {
                 String s = (String) JOptionPane.showInputDialog(null, message);
                 input_winLength = Integer.parseInt(s);
