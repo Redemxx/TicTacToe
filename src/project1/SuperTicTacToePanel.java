@@ -381,6 +381,7 @@ public class SuperTicTacToePanel extends JPanel {
                 return;
             game = moves_history.get(moves_history.size()-1);
             moves_history.remove(moves_history.size()-1);
+            current_player = !current_player;
             displayBoard();
         }
 
