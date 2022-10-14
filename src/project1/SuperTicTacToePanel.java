@@ -319,6 +319,8 @@ public class SuperTicTacToePanel extends JPanel {
 
             if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
                 game.ai_choose();
+            else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_TWO)
+                game.connor_choose();
             current_player = !current_player;
             displayBoard();
 
