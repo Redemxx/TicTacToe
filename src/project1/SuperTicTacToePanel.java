@@ -58,7 +58,7 @@ public class SuperTicTacToePanel extends JPanel {
         fileMenu.add(undoItem);
         fileMenu.add(redoItem);
 
-        quitItem.addActionListener(new MenuHandler());
+        quitItem.addActionListener(buttonListener::actionPerformed_quit);
 //        undoItem.addActionListener(new MenuHandler()::actionPerformedB);
         undoItem.addActionListener(buttonListener::actionPerformed_undo);
         redoItem.addActionListener(new MenuHandler()::actionPerformedC);
@@ -180,6 +180,11 @@ public class SuperTicTacToePanel extends JPanel {
             game = moves_history.get(moves_history.size()-1);
             moves_history.remove(moves_history.size()-1);
             updateBoard();
+        }
+
+        public void actionPerformed_quit(ActionEvent eventA) {
+            // ActionListener for QUIT button
+            System.exit(0);
         }
 
     }
