@@ -294,7 +294,7 @@ public class SuperTicTacToeGame {
 
         for (int r = 0; r < dimension; r++) {
             for (int c = 0; c < dimension; c++) {
-                if (board_weight[r][c] == largest_spot) {
+                if (board_weight[r][c] == largest_spot && largest_spot != 0) {
                     plays.add(new int[]{r,c});
                 }
             }
