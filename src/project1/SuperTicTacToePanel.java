@@ -236,7 +236,7 @@ public class SuperTicTacToePanel extends JPanel {
                 type = (int)
                         JOptionPane.showOptionDialog(null, message, "Choose AI",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon(),
-                                new String[]{"AI_ONE", "AI_TWO", "AI_THREE"}, "AI_ONE");
+                                new String[]{"AI-One", "AI-Two", "AI-Three"}, "AI-ONE");
         } catch (Exception e) { // Default win length is 4 if board size is greater than 3
             type = 4;
         }
@@ -349,6 +349,8 @@ public class SuperTicTacToePanel extends JPanel {
                 game.ai_choose();
             else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_TWO)
                 game.connor_choose();
+            else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_THREE)
+                game.justin_choose();
             current_player = !current_player;
             displayBoard();
 

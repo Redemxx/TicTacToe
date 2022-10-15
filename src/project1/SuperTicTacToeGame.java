@@ -1,7 +1,9 @@
 package project1;
 
 import javax.swing.*;
+import javax.swing.text.html.Option;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class SuperTicTacToeGame {
     private final Cell[][] game_board;
@@ -131,19 +133,13 @@ public class SuperTicTacToeGame {
 
         // call select(row, col);
         // reuse code; don't re-write
-
-        SuperTicTacToeGame choices = new SuperTicTacToeGame(this); //create a board to access choices without messing with current board.
-
         boolean foundSpot = false; // created a boolean for while loop so ai can exit safely.
 
         while(!foundSpot) { // not true until it finds a spot that is empty.
-
             int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.
             int randomCol = (int) (Math.random() * (dimension)); //only get spots in the dimension of the board.
 
-            Cell[][] tempChoices = choices.getboard(); //creates a temp board.
-
-            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
+            if (game_board[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
                 select(randomRow, randomCol); //select spot!
                 foundSpot = true; //found spot!
             }
@@ -212,20 +208,200 @@ public class SuperTicTacToeGame {
         }
         **/
 
-        // if nothing to block, picks randomly
-        while(!foundSpot) { // not true until it finds a spot that is empty.
-
-            int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.
-            int randomCol = (int) (Math.random() * (dimension)); //only get spots in the dimension of the board.
-
-            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
-                select(randomRow, randomCol); //select spot!
-                foundSpot = true; //found spot!
-            }
-        }
+//        // if nothing to block, picks randomly
+//        while(!foundSpot) { // not true until it finds a spot that is empty.
+//
+//            int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.
+//            int randomCol = (int) (Math.random() * (dimension)); //only get spots in the dimension of the board.
+//
+//            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
+//                select(randomRow, randomCol); //select spot!
+//                foundSpot = true; //found spot!
+//            }
+//        }
+        ai_choose();
     }
 
+    public void justin_choose() {
+        int[][] board_weight = new int[dimension][dimension];
+        int[][] board_wins = new int[dimension][dimension];
+        boolean critical = false;
+        int largest_spot = 0;
 
+        for (int r = 0; r < dimension; r++) {
+            for (int c = 0; c < dimension; c++) {
+                if (!game_board[r][c].equals(Cell.EMPTY))
+                    continue;
+                int sum = 0;
+
+                int comp = justin_choose_recursive(r,c,0) +  justin_choose_recursive(r,c,2);
+                if (comp > sum)
+                    sum = comp;
+                comp = justin_choose_recursive(r,c,1) +  justin_choose_recursive(r,c,3);
+                if (comp > sum)
+                    sum = comp;
+                comp = justin_choose_recursive(r,c,4) +  justin_choose_recursive(r,c,7);
+                if (comp > sum)
+                    sum = comp;
+                comp = justin_choose_recursive(r,c,5) +  justin_choose_recursive(r,c,6);
+                if (comp > sum)
+                    sum = comp;
+
+                if (sum >= win_int-1) {
+                    critical = true;
+                }
+
+                if (sum > largest_spot)
+                    largest_spot = sum;
+                board_weight[r][c] = sum;
+
+                // Winning moves check
+                int win_sum = 0;
+                comp = justin_choose_recursive_win(r,c,0) +  justin_choose_recursive_win(r,c,2);
+                if (comp > win_sum)
+                    win_sum = comp;
+                comp = justin_choose_recursive_win(r,c,1) +  justin_choose_recursive_win(r,c,3);
+                if (comp > win_sum)
+                    win_sum = comp;
+                comp = justin_choose_recursive_win(r,c,4) +  justin_choose_recursive_win(r,c,7);
+                if (comp > win_sum)
+                    win_sum = comp;
+                comp = justin_choose_recursive_win(r,c,5) +  justin_choose_recursive_win(r,c,6);
+                if (comp > win_sum)
+                    win_sum = comp;
+
+                board_wins[r][c] = win_sum;
+            }
+        }
+
+        // Check for a winning move and play it
+        for (int r = 0; r < dimension; r++) {
+            for (int c = 0; c < dimension; c++) {
+                if (board_wins[r][c] == win_int-1) {
+                    select(r,c);
+                    return;
+                }
+            }
+        }
+
+        // Add some variation to behaviour
+        if (!critical && Math.random() > 0.8) {
+            ai_choose();
+            return;
+        }
+
+        ArrayList<int[]> plays = new ArrayList<int[]>();
+
+        for (int r = 0; r < dimension; r++) {
+            for (int c = 0; c < dimension; c++) {
+                if (board_weight[r][c] == largest_spot) {
+                    plays.add(new int[]{r,c});
+                }
+            }
+        }
+
+        if (plays.size() == 0) {
+            ai_choose();
+            return;
+        }
+
+        int[] selection = plays.get((int)(Math.random() * (plays.size())));
+        select(selection[0], selection[1]);
+    }
+
+    private int justin_choose_recursive(int r, int c, int direction) {
+        int row_delta = 0;
+        int col_delta = 0;
+        Cell enemy = current_turn ? Cell.X : Cell.O;
+
+        switch (direction){
+            case 0: //Up
+                row_delta = -1;
+                break;
+            case 1: // Left
+                col_delta = -1;
+                break;
+            case 2: // Down
+                row_delta = 1;
+                break;
+            case 3: // Right
+                col_delta = 1;
+                break;
+            case 4: // Down right
+                row_delta = 1;
+                col_delta = 1;
+                break;
+            case 5: // Down left
+                row_delta = 1;
+                col_delta = -1;
+                break;
+            case 6: // Up right
+                row_delta = -1;
+                col_delta = 1;
+                break;
+            case 7: // Up left
+                row_delta = -1;
+                col_delta = -1;
+                break;
+        }
+
+        r += row_delta;
+        c += col_delta;
+
+        if (r < 0 || r >= dimension || c < 0 || c >= dimension)
+            return 0;
+
+        if (game_board[r][c].equals(enemy))
+            return 1 + justin_choose_recursive(r, c, direction);
+        return 0;
+    }
+
+    private int justin_choose_recursive_win(int r, int c, int direction) {
+        int row_delta = 0;
+        int col_delta = 0;
+        Cell enemy = current_turn ? Cell.O : Cell.X;
+
+        switch (direction){
+            case 0: //Up
+                row_delta = -1;
+                break;
+            case 1: // Left
+                col_delta = -1;
+                break;
+            case 2: // Down
+                row_delta = 1;
+                break;
+            case 3: // Right
+                col_delta = 1;
+                break;
+            case 4: // Down right
+                row_delta = 1;
+                col_delta = 1;
+                break;
+            case 5: // Down left
+                row_delta = 1;
+                col_delta = -1;
+                break;
+            case 6: // Up right
+                row_delta = -1;
+                col_delta = 1;
+                break;
+            case 7: // Up left
+                row_delta = -1;
+                col_delta = -1;
+                break;
+        }
+
+        r += row_delta;
+        c += col_delta;
+
+        if (r < 0 || r >= dimension || c < 0 || c >= dimension)
+            return 0;
+
+        if (game_board[r][c].equals(enemy))
+            return 1 + justin_choose_recursive_win(r, c, direction);
+        return 0;
+    }
 
 
     public GameStatus getGameStatus() {
@@ -297,72 +473,6 @@ public class SuperTicTacToeGame {
         if (game_status == GameStatus.IN_PROGRESS && (placed == dimension * dimension)) {
             game_status = GameStatus.CATS;
         }
-
-        //        int countO = 0;
-        //        int countX = 0;
-        //
-        //        for (int col = 0; col < game_board.length; col++) { // O horizontal win condition...
-        //
-        //            if (game_board[0][col] == Cell.O) { //Maybe a nested for loop to check multiple rows?
-        //                countO++;
-        //            }
-        //            if (game_board[0][col] == Cell.X) {
-        //                System.out.println("Blocked!");
-        //                countO = 0;
-        //            }
-        //            if (countO == 3) {
-        //                countO = 0;
-        //                return game_status = GameStatus.O_WON;
-        //            }
-        //        }
-        //
-        //        for (int row = 0; row < game_board.length; row++) { // O vertical win condition...
-        //            if(game_board[row][0] == Cell.O){ //Maybe a nested for loop to check multiple columns?
-        //                countO++;
-        //                if(game_board[row][0] == Cell.X){
-        //                    System.out.println("Blocked!");
-        //                    countO = 0;
-        //                }
-        //                if(countO == 3){
-        //                    countO = 0;
-        //                    return game_status = GameStatus.X_WON;
-        //                }
-        //                }
-        //        }
-        //
-        //        for (int col = 0; col < game_board.length; col++) { // O diagonal win condition...
-        //            for(int row = 0; row < game_board.length; row++){
-        //                if(game_board[row][col] == Cell.O) { //it checks downwards.
-        //                    countO++;
-        //                }
-        //                if(game_board[row][col] == Cell.X){
-        //                    System.out.println("Blocked!");
-        //                    countO = 0;
-        //                }
-        //                if(countO == 3){
-        //                    countO = 0;
-        //                    return game_status = GameStatus.O_WON;
-        //                }
-        //
-        //            }
-        //
-        //        }
-        //
-        //        for (int col = 0; col < game_board.length; col++) { // X horizontal win condition...
-        //            if(game_board[0][col] == Cell.X){
-        //                countX++;
-        //                if(game_board[0][col] == Cell.O){
-        //                    System.out.println("Blocked!");
-        //                    countX = 0;
-        //                }
-        //                if(countX == 3){
-        //                    countX = 0;
-        //                    return game_status = GameStatus.X_WON;
-        //                }
-        //            }
-        //        }
-        //
-        //        return game_status;
 
         return game_status;
     }
