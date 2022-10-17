@@ -277,7 +277,7 @@ public class SuperTicTacToeGame {
         // Check for a winning move and play it
         for (int r = 0; r < dimension; r++) {
             for (int c = 0; c < dimension; c++) {
-                if (board_wins[r][c] == win_int-1) {
+                if (board_wins[r][c] >= win_int-1) {
                     select(r,c);
                     return;
                 }
