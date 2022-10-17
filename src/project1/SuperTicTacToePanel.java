@@ -38,8 +38,8 @@ public class SuperTicTacToePanel extends JPanel {
     }
     public SuperTicTacToePanel() {
         int size = getSizeInput("Enter desired size of the TicTacToe board:");
-        String turn = getFirstTurn("Who starts first? X or O");
         int winLength = getWinLength("How many in a row for a win?", size);
+        String turn = getFirstTurn("Who starts first? X or O");
         game = new SuperTicTacToeGame(size, turn, winLength);
         instantiateInstance();
     }
@@ -58,7 +58,7 @@ public class SuperTicTacToePanel extends JPanel {
         moves_history = new ArrayList<SuperTicTacToeGame>();
         current_player = false;
 
-        gui = new JFrame("TicTacToe");
+        gui = new JFrame("Super Tic-Tac-Toe");
 //        gui.setLayout(new GridLayout(1, 2));
         gui.setLayout(new GridBagLayout());
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +75,7 @@ public class SuperTicTacToePanel extends JPanel {
         fileMenu = new JMenu("File");
         quitItem = new JMenuItem("Quit!");
         undoItem = new JMenuItem("Undo!");
-        changeSizeItem = new JMenuItem("Change Board Size?");
+        changeSizeItem = new JMenuItem("Change Board Size");
 
         fileMenu.add(quitItem);
         fileMenu.add(undoItem);

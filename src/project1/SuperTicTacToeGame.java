@@ -13,6 +13,7 @@ public class SuperTicTacToeGame {
     // false for player 1, X
     // true for player 2, O
     private Boolean current_turn;
+    private Boolean x_first;
     private int placed;
     private final int win_int;
     private boolean ai;
@@ -38,6 +39,7 @@ public class SuperTicTacToeGame {
      */
     public SuperTicTacToeGame() {
         game_board = new Cell[3][3];
+        x_first = false;
         dimension = 3;
         win_int = 3;
         instantiateBoard();
@@ -75,17 +77,22 @@ public class SuperTicTacToeGame {
         game_board = new Cell[size][size];
         dimension = size;
         win_int = winLength;
-        instantiateBoard();
+
         game_status = GameStatus.IN_PROGRESS;
         ai = false;
 
         if(turn.toLowerCase().equals("x")){
             current_turn = false;
+            x_first = true;
         } else if(turn.toLowerCase().equals("o")){
             current_turn = true;
+            x_first = false;
         } else{
             JOptionPane.showMessageDialog(null, "Turn defaulted to player X");
+            x_first = true;
         }
+
+        instantiateBoard();
     }
 
     /*
@@ -93,7 +100,7 @@ public class SuperTicTacToeGame {
      */
     private void instantiateBoard() {
         placed = 0;
-        current_turn = false;
+        current_turn = !x_first;
         for (int a = 0; a < game_board.length; a++) {
             for (int b = 0; b < game_board[0].length; b++) {
                 game_board[a][b] = Cell.EMPTY;
@@ -119,7 +126,6 @@ public class SuperTicTacToeGame {
     }
 
     public void reset() {
-        current_turn = false;
         game_status = GameStatus.IN_PROGRESS;
         instantiateBoard();
     }
