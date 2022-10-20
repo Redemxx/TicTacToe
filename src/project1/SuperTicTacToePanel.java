@@ -348,8 +348,12 @@ public class SuperTicTacToePanel extends JPanel {
             int player = current_player ? 1 : 0;
             if (ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
                 moves_history.add(new SuperTicTacToeGame(game));
+                try {
+                    game.select(row, col);
+                }catch (Exception E) {
+                    return;
+                }
                 jButtonsBoard[row][col].setName("-1");
-                game.select(row, col);
                 current_player = !current_player;
                 displayBoard();
             }

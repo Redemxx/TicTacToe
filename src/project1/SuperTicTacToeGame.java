@@ -115,6 +115,8 @@ public class SuperTicTacToeGame {
                     "greater than current game-board size");
         }
 
+        if (game_board[row][col] != Cell.EMPTY)
+            throw new IllegalArgumentException("Cell is already played");
         // Sets the currently active player in the selected spot.
         game_board[row][col] = current_turn ? Cell.O : Cell.X;
         current_turn = !current_turn;
