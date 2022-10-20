@@ -32,6 +32,7 @@ public class SuperTicTacToePanel extends JPanel {
     private JPanel game_panel;
     private JPanel button_panel;
     private JLabel playerTurn;
+    private Boolean in_thread;
 
     public SuperTicTacToeGame get_game() {
         return this.game;
@@ -50,6 +51,7 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     private void instantiateInstance() {
+        in_thread = false;
         xIcon = new ImageIcon(getClass().getResource("x.png"));
         oIcon = new ImageIcon(getClass().getResource("o.png"));
         emptyIcon = new ImageIcon();
@@ -203,7 +205,7 @@ public class SuperTicTacToePanel extends JPanel {
 
         // Attempt to get size of board from user
         try {
-            while (input_size <= 2 || input_size >= 15  ) {
+            while (input_size <= 2 || input_size >= 15) {
                 String s = (String) JOptionPane.showInputDialog(null, message);
                 if (s == null) {
                     System.exit(0);
@@ -226,6 +228,9 @@ public class SuperTicTacToePanel extends JPanel {
         } catch (Exception e) { // Default turn is X if no input or window is closed
             input_turn = "x";
         }
+
+        if (input_turn == null)
+            input_turn = "x";
         return input_turn;
     }
 
@@ -316,6 +321,7 @@ public class SuperTicTacToePanel extends JPanel {
             ai_states = new SuperTicTacToeGame.ai_type[] {SuperTicTacToeGame.ai_type.NONE,
                     SuperTicTacToeGame.ai_type.NONE};
             displayBoard();
+            moves_history = new ArrayList<SuperTicTacToeGame>();
         }
 
 //        checkAiPlay();
@@ -338,7 +344,12 @@ public class SuperTicTacToePanel extends JPanel {
         //
         //
         //            }
-        new Thread(this::checkAiPlay).start();
+        if (!in_thread)
+            new Thread(this::checkAiPlay).start();
+        else {
+            in_thread = false;
+            checkAiPlay();
+        }
     }
 
     private void showStatus(GameStatus statuus) {
@@ -370,6 +381,7 @@ public class SuperTicTacToePanel extends JPanel {
             else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_THREE)
                 game.justin_choose();
             current_player = !current_player;
+            in_thread = true;
             displayBoard();
 
 
@@ -419,7 +431,9 @@ public class SuperTicTacToePanel extends JPanel {
 
 //            game.set_ai(!game.get_ai());
 //            displayBoard();
-
+            int player = current_player ? 1 : 0;
+            if (ai_states[player] != SuperTicTacToeGame.ai_type.NONE)
+                return;
             SuperTicTacToeGame.ai_type type = getAiType("Choose an ai type");
 
             if (current_player) {
