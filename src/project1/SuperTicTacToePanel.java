@@ -38,12 +38,18 @@ public class SuperTicTacToePanel extends JPanel {
     public SuperTicTacToeGame get_game() {
         return this.game;
     }
+
+    /**
+     * SuperTicTacToePanel collects the information needed
+     * to instantiate all non-predetermined variables
+     */
     public SuperTicTacToePanel() {
-        int size = getSizeInput("Enter desired size of the TicTacToe board:");
-        int winLength = getWinLength("How many in a row for a win?", size);
-        String turn = getFirstTurn("Who starts first? X or O");
-        game = new SuperTicTacToeGame(size, turn, winLength);
-        instantiateInstance();
+        // Before instantiating a new SuperTicTacToePanel and SuperTicTacGame, we first gather inputs from the user
+        int size = getSizeInput("Enter desired size of the TicTacToe board:"); // collects size of board
+        int winLength = getWinLength("How many in a row for a win?", size); // gets win-length
+        String turn = getFirstTurn("Who starts first? X or O"); // determines who goes first
+        game = new SuperTicTacToeGame(size, turn, winLength); // creates SuperTicTacToeGame
+        instantiateInstance(); // creates SuperTicTacToePanel
     }
 
     public SuperTicTacToePanel(SuperTicTacToeGame game) {
@@ -51,6 +57,10 @@ public class SuperTicTacToePanel extends JPanel {
         instantiateInstance();
     }
 
+    /**
+     * instantiateInstance creates and displays the main JFrame holding the
+     * game board JPanel, file menu, and other JPanel which holds the buttons
+     */
     private void instantiateInstance() {
         undoing = false;
         in_thread = false;
@@ -66,38 +76,47 @@ public class SuperTicTacToePanel extends JPanel {
         gui.setLayout(new GridBagLayout());
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // creates buttons to be placed in buttonPanel
         undo = new JButton("Undo!");
         enable_ai = new JButton("Enable AI!");
 
+        // creates JLabel playerTurn to display the current turn, also to be placed in buttonPanel
         if(game.getTurn()){
-            playerTurn = new JLabel("O's turn");
+            playerTurn = new JLabel("O's turn"); // if O's turn, set label to "O"
         } else{
-            playerTurn = new JLabel("X's Turn");
+            playerTurn = new JLabel("X's Turn"); // if X's turn, set label to "X"
         }
 
+        // instantiates all elements of the file menu (top left)
         fileMenu = new JMenu("File");
         quitItem = new JMenuItem("Quit!");
         undoItem = new JMenuItem("Undo!");
         changeSizeItem = new JMenuItem("Change Board Size");
 
+        // adds the elements above^ to the file menu
         fileMenu.add(quitItem);
         fileMenu.add(undoItem);
         fileMenu.add(changeSizeItem);
 
+        // adds an individual actionListener to each file menu element
         quitItem.addActionListener(buttonListener::actionPerformed_quit);
         undoItem.addActionListener(buttonListener::actionPerformed_undo);
         changeSizeItem.addActionListener(buttonListener::actionPerformed_size);
 
+        // adds individual actionListeners to the buttons displayed in buttonPanel
         undo.addActionListener(buttonListener::actionPerformed_undo);
         enable_ai.addActionListener(buttonListener::actionPerformed_enableai);
 
+        // instantiates menu to hold fileMenu
         JMenuBar menus = new JMenuBar();
         menus.add(fileMenu);
 
+        // creates a game_panel JPanel to hold our Tic Tac Toe game within the gui
         game_panel = new JPanel();
         game_panel.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
         game_panel.setPreferredSize(new Dimension(500, 500));
 
+        // creates the button_panel to hold our undo and enable_ai buttons, then display playerTurn
         button_panel = new JPanel();
         button_panel.setLayout(new GridLayout(3, 1));
         button_panel.add(undo);
@@ -117,6 +136,9 @@ public class SuperTicTacToePanel extends JPanel {
 
         int border_width = (int) (6 - (game.getDimension() - 3 ) * 0.25);
 
+        // creates the array of JButtons to hold X's and O's and sets a button border depending
+        // on where the button is located in the array so that the array of buttons looks like
+        // a true TicTacToe board when formatted in the gui
         for (int a = 0; a < jButtonsBoard.length; a++) {
             for (int b = 0; b < jButtonsBoard[0].length; b++) {
                 jButtonsBoard[a][b] = new JButton("", emptyIcon);
@@ -148,12 +170,15 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
+        // sets all cells in the array to enum EMPTY
         cells = new Cell[s][s];
         for (int a = 0; a < cells.length; a++) {
             for (int b = 0; b < cells[0].length; b++) {
                 cells[a][b] = Cell.EMPTY;
             }
         }
+
+        // formats the buttonPanel elements
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.VERTICAL;
         c.gridx = 0;
@@ -172,7 +197,11 @@ public class SuperTicTacToePanel extends JPanel {
 
         ai_states = new SuperTicTacToeGame.ai_type[] {SuperTicTacToeGame.ai_type.NONE, SuperTicTacToeGame.ai_type.NONE};
     }
-
+    /**
+     * getSizeInput creates a popup dialogue box when called allowing the user to input the size of the board
+     * @param message is the dialogue informing the user what they are inputting
+     * @return the size of the board
+     */
     private int getSizeInput(String message) {
         int input_size = 0;
 
@@ -191,6 +220,11 @@ public class SuperTicTacToePanel extends JPanel {
         return input_size;
     }
 
+    /**
+     * getFirstTurn creates a popup dialogue box when called allowing the user to input who will go first
+     * @param message is the dialogue informing the user what they are inputting
+     * @return the player that goes first
+     */
     private String getFirstTurn(String message) {
         String input_turn = "";
 
@@ -202,11 +236,18 @@ public class SuperTicTacToePanel extends JPanel {
             input_turn = "x";
         }
 
-        if (input_turn == null)
+        if (input_turn == null) // no input sets the first turn to player X
             input_turn = "x";
         return input_turn;
     }
 
+    /**
+     * getWinLength creates a popup dialogue box when called allowing the user to input who will go first
+     * @param message is the dialogue informing the user what they are inputting
+     * @param boardSize takes in the size of the game board to determine if win-length
+     *                 needs to be greater than the default win-length of 3
+     * @return the win-length our game will use
+     */
     private int getWinLength(String message, int boardSize) {
         int input_winLength = 0;
 
@@ -245,6 +286,7 @@ public class SuperTicTacToePanel extends JPanel {
         return return_type;
     }
 
+     // whenever called, displayBoard updates the elements in our game_board and checks for a win
     private void displayBoard() {
         cells = game.getboard();
 
@@ -270,12 +312,12 @@ public class SuperTicTacToePanel extends JPanel {
                 if (cells[a][b] == Cell.X) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(
                             new ImageIcon(xIcon.getImage().getScaledInstance(
-                                    jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
+                                    jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH))); // takes game images and makes them scalable
                 }
                 if (cells[a][b] == Cell.O) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(
                             new ImageIcon(oIcon.getImage().getScaledInstance(
-                            jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
+                            jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH))); // takes game images and makes them scalable
                 }
                 ++cnt;
             }
@@ -392,8 +434,8 @@ public class SuperTicTacToePanel extends JPanel {
         }
         public void actionPerformed_size(ActionEvent e) {
             // ActionListener for changing board size
-            gui.dispose();
-            game = new SuperTicTacToePanel().get_game();
+            gui.dispose(); // closes last game
+            game = new SuperTicTacToePanel().get_game(); // creates new game
         }
     }
 }
