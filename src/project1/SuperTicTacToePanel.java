@@ -232,7 +232,7 @@ public class SuperTicTacToePanel extends JPanel {
                 type = (int)
                         JOptionPane.showOptionDialog(null, message, "Choose AI",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon(),
-                                new String[]{"Easy (Random)", "Hard (Analyze)"}, "Easy (Random)");
+                                new String[]{"Easy (Random)", "Hard (Analyzes)"}, "Easy (Random)");
         } catch (Exception e) { // Default win length is 4 if board size is greater than 3
             type = 2;
         }

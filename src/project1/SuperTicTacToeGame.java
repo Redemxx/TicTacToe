@@ -402,7 +402,7 @@ public class SuperTicTacToeGame {
             }
         }
 
-        if (game_status == GameStatus.IN_PROGRESS && (placed == dimension * dimension)) {
+        if (game_status == GameStatus.IN_PROGRESS && (placed >= dimension * dimension)) {
             game_status = GameStatus.CATS;
         }
 
