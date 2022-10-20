@@ -146,7 +146,7 @@ public class SuperTicTacToeGame {
             int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.
             int randomCol = (int) (Math.random() * (dimension)); //only get spots in the dimension of the board.
 
-            if (game_board[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
+            if (game_board[randomRow][randomCol] == Cell.EMPTY) {
                 select(randomRow, randomCol); //select spot!
                 foundSpot = true; //found spot!
             }
@@ -154,6 +154,9 @@ public class SuperTicTacToeGame {
 
     }
 
+    /**
+     * Analyzes the board for the best spot to play and will call select() with the selected location
+     */
     public void justin_choose() {
         int[][] board_weight = new int[dimension][dimension];
         int[][] board_wins = new int[dimension][dimension];
@@ -241,6 +244,15 @@ public class SuperTicTacToeGame {
         select(selection[0], selection[1]);
     }
 
+    /**
+     * Recursive helper method that sums up the number of the other player's Cells.
+     * Checks in a direction specified by 'direction'.
+     * @param r int Row to begin at
+     * @param c int Col to begin at
+     * @param direction int [0-7] specifying which direction to check.
+     *                  {UP,LEFT,DOWN,RIGHT,DIAG-DOWN-RIGHT,DIAG-DOWN-LEFT,DIAG-UP-RIGHT,DIAG-UP-LEFT}
+     * @return int sum of the other players Cells
+     */
     private int justin_choose_recursive(int r, int c, int direction) {
         int row_delta = 0;
         int col_delta = 0;
@@ -288,6 +300,16 @@ public class SuperTicTacToeGame {
         return 0;
     }
 
+    /**
+     * Recursive helper method that sums up the number of the current player's Cells.
+     * Used for the AI to check for winning moves.
+     * Checks in a direction specified by 'direction'.
+     * @param r int Row to begin at
+     * @param c int Col to begin at
+     * @param direction int [0-7] specifying which direction to check.
+     *                  {UP,LEFT,DOWN,RIGHT,DIAG-DOWN-RIGHT,DIAG-DOWN-LEFT,DIAG-UP-RIGHT,DIAG-UP-LEFT}
+     * @return int sum of the players Cells
+     */
     private int justin_choose_recursive_win(int r, int c, int direction) {
         int row_delta = 0;
         int col_delta = 0;
@@ -335,13 +357,11 @@ public class SuperTicTacToeGame {
         return 0;
     }
 
-
+    /**
+     * Analyzes the board to check if a player has won, or if both players tied.
+     * @return GameStatus representing the state of the game
+     */
     public GameStatus getGameStatus() {
-        // TODO: getGameStatus()
-        //  Analyze board for a winner or a draw
-        //  Set game_status to status
-        //  Return game_status
-
         int check_len = dimension - win_int + 1;
 
         // Checker for rows
@@ -409,6 +429,14 @@ public class SuperTicTacToeGame {
         return game_status;
     }
 
+    /**
+     * Recursive helper method that checks how long a chain of plays is on the board horizontally.
+     * @param row int row to check
+     * @param col int col to start at
+     * @param cell Always pass Cell.EMPTY, the point of this is the recursive functionality that checks for
+     *             identical Cells chained together.
+     * @return int sum of identical cells horizontally from the starting point of row, col
+     */
     private int checkRowWin(int row, int col, Cell cell) {
         if (row >= dimension || col >= dimension) {
             return 0;
@@ -428,6 +456,14 @@ public class SuperTicTacToeGame {
         }
     }
 
+    /**
+     * Recursive helper method that checks how long a chain of plays is on the board vertically.
+     * @param row int row to check
+     * @param col int col to start at
+     * @param cell Always pass Cell.EMPTY, the point of this is the recursive functionality that checks for
+     *             identical Cells chained together.
+     * @return int sum of identical cells vertically from the starting point of row, col
+     */
     private int checkColWin(int row, int col, Cell cell) {
         if (row >= dimension || col >= dimension) {
             return 0;
@@ -446,6 +482,14 @@ public class SuperTicTacToeGame {
         }
     }
 
+    /**
+     * Recursive helper method that checks how long a chain of plays is on the board in right diagonal.
+     * @param row int row to check
+     * @param col int col to start at
+     * @param cell Always pass Cell.EMPTY, the point of this is the recursive functionality that checks for
+     *             identical Cells chained together.
+     * @return int sum of identical cells in a right diagonal from the starting point of row, col
+     */
     private int checkDiagWin(int row, int col, Cell cell) {
         if (row >= dimension || col >= dimension) {
             return 0;
@@ -464,6 +508,14 @@ public class SuperTicTacToeGame {
         }
     }
 
+    /**
+     * Recursive helper method that checks how long a chain of plays is on the board in left diagonal.
+     * @param row int row to check
+     * @param col int col to start at
+     * @param cell Always pass Cell.EMPTY, the point of this is the recursive functionality that checks for
+     *             identical Cells chained together.
+     * @return int sum of identical cells in a left diagonal from the starting point of row, col
+     */
     private int checkLDiagWin(int row, int col, Cell cell) {
         if (row >= dimension || col < 0) {
             return 0;
@@ -482,6 +534,10 @@ public class SuperTicTacToeGame {
         }
     }
 
+    /**
+     * enum ai_type holds the possible states of a player; being NONE for the user, EASY for the random AI,
+     * and HARD for the AI that analyzes the board.
+     */
     public enum ai_type {
         EASY,
         HARD,
