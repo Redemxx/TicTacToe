@@ -61,7 +61,6 @@ public class SuperTicTacToePanel extends JPanel {
         current_player = false;
 
         gui = new JFrame("Super Tic-Tac-Toe");
-//        gui.setLayout(new GridLayout(1, 2));
         gui.setLayout(new GridBagLayout());
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -84,7 +83,6 @@ public class SuperTicTacToePanel extends JPanel {
         fileMenu.add(changeSizeItem);
 
         quitItem.addActionListener(buttonListener::actionPerformed_quit);
-//        undoItem.addActionListener(new MenuHandler()::actionPerformedB);
         undoItem.addActionListener(buttonListener::actionPerformed_undo);
         changeSizeItem.addActionListener(buttonListener::actionPerformed_size);
 
@@ -95,33 +93,14 @@ public class SuperTicTacToePanel extends JPanel {
         menus.add(fileMenu);
 
         game_panel = new JPanel();
-//        gui.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
         game_panel.setLayout(new GridLayout(game.getDimension(), game.getDimension()));
         game_panel.setPreferredSize(new Dimension(500, 500));
 
         button_panel = new JPanel();
-//        button_panel.setLayout(new GridBagLayout());
         button_panel.setLayout(new GridLayout(3, 1));
-//        GridBagConstraints c = new GridBagConstraints();
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.gridx = 0;
-//        c.gridy = 0;
-//        button_panel.add(undo, c);
         button_panel.add(undo);
-
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.gridx = 0;
-//        c.gridy = 1;
-//        button_panel.add(enable_ai, c);
         button_panel.add(enable_ai);
-
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.gridx = 0;
-//        c.gridy = 2;
-//        button_panel.add(playerTurn, c);
         button_panel.add(playerTurn);
-//        button_panel.setPreferredSize(new Dimension(100, 500));
-//      button_panel size should be adjusted further
 
         int s = game.getDimension();
         jButtonsBoard = new JButton[s][s];
@@ -141,11 +120,7 @@ public class SuperTicTacToePanel extends JPanel {
                 jButtonsBoard[a][b] = new JButton("", emptyIcon);
                 jButtonsBoard[a][b].addActionListener(buttonListener);
                 jButtonsBoard[a][b].setName(String.valueOf(cnt));
-//                jButtonsBoard[a][b].setSize(100, 100);
-//                gui.add(buttons[i][k]);
-//                buttons[i][k].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
                 game_panel.add(jButtonsBoard[a][b]);
-//                jButtonsBoard[a][b].setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
                 if (a == 0)
                     top = 0;
                 else
@@ -188,12 +163,8 @@ public class SuperTicTacToePanel extends JPanel {
         c.gridy = 0;
         c.gridheight = 3;
         c.gridwidth = 3;
-//        game_panel.setPreferredSize(new Dimension(500, 500));
         gui.getContentPane().add(game_panel, c);
-//        gui.setSize(new Dimension(800,800));
-//        gui.setPreferredSize(new Dimension(600, 600));
         gui.setSize(610, 560);
-//        gui.pack();
         gui.setJMenuBar(menus);
         gui.setVisible(true);
 
@@ -288,9 +259,6 @@ public class SuperTicTacToePanel extends JPanel {
             for (int b = 0; b < dim; b++) {
                 if (cells[a][b] == Cell.EMPTY) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(emptyIcon);
-//                    jButtonsBoard[cnt / dim][cnt % dim].updateUI();
-
-
                     // Resets the board to be clickable again after a restart;
                     // where all the buttons would have the name -1 because they were
                     // used in the previous game.
@@ -302,13 +270,11 @@ public class SuperTicTacToePanel extends JPanel {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(
                             new ImageIcon(xIcon.getImage().getScaledInstance(
                                     jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
-//                    jButtonsBoard[cnt / dim][cnt % dim].updateUI();
                 }
                 if (cells[a][b] == Cell.O) {
                     jButtonsBoard[cnt / dim][cnt % dim].setIcon(
                             new ImageIcon(oIcon.getImage().getScaledInstance(
                             jButtonsBoard[a][b].getWidth(), -1, Image.SCALE_SMOOTH)));
-//                    jButtonsBoard[cnt / dim][cnt % dim].updateUI();
                 }
                 ++cnt;
             }
@@ -324,26 +290,6 @@ public class SuperTicTacToePanel extends JPanel {
             moves_history = new ArrayList<SuperTicTacToeGame>();
         }
 
-//        checkAiPlay();
-        //            int player = current_player ? 1 : 0;
-        //            if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
-        //                try{
-        //                    Thread.sleep(1000);
-        //                }catch (Exception e) {
-        //
-        //                }
-        //
-        //                moves_history.add(new SuperTicTacToeGame(game));
-        //
-        //                if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
-        //                    game.ai_choose();
-        //                else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_TWO)
-        //                    game.connor_choose();
-        //                current_player = !current_player;
-        //                displayBoard();
-        //
-        //
-        //            }
         if (!in_thread)
             new Thread(this::checkAiPlay).start();
         else {
@@ -363,15 +309,11 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     private void checkAiPlay() {
-
         int player = current_player ? 1 : 0;
         if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
             try{
                 Thread.sleep(500);
-            }catch (Exception e) {
-
-            }
-
+            }catch (Exception ignored) {}
             moves_history.add(new SuperTicTacToeGame(game));
 
             if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
@@ -383,8 +325,6 @@ public class SuperTicTacToePanel extends JPanel {
             current_player = !current_player;
             in_thread = true;
             displayBoard();
-
-
         }
     }
 
@@ -426,11 +366,6 @@ public class SuperTicTacToePanel extends JPanel {
 
         public void actionPerformed_enableai(ActionEvent e) {
             // ActionListener for ENABLE AI button
-
-            // insert ai code enabler
-
-//            game.set_ai(!game.get_ai());
-//            displayBoard();
             int player = current_player ? 1 : 0;
             if (ai_states[player] != SuperTicTacToeGame.ai_type.NONE)
                 return;
@@ -446,7 +381,6 @@ public class SuperTicTacToePanel extends JPanel {
         }
         public void actionPerformed_size(ActionEvent e) {
             // ActionListener for changing board size
-
             gui.dispose();
             game = new SuperTicTacToePanel().get_game();
         }
