@@ -1,8 +1,6 @@
 package project1;
 
 import javax.swing.*;
-import javax.swing.text.html.Option;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SuperTicTacToeGame {
@@ -16,7 +14,6 @@ public class SuperTicTacToeGame {
     private Boolean x_first;
     private int placed;
     private final int win_int;
-    private boolean ai;
 
     public int getDimension() {
         return dimension;
@@ -26,13 +23,6 @@ public class SuperTicTacToeGame {
         return current_turn;
     }
 
-    public boolean get_ai() {
-        return ai;
-    }
-
-    public void set_ai(boolean state) {
-        ai = state;
-    }
 
     /**
      * Creates a new game-board with default size of 3x3.
@@ -65,7 +55,7 @@ public class SuperTicTacToeGame {
         game_status = game.game_status;
         placed = game.placed;
         current_turn = game.current_turn;
-        ai = false;
+        x_first = game.x_first;
     }
 
     /**
@@ -79,12 +69,11 @@ public class SuperTicTacToeGame {
         win_int = winLength;
 
         game_status = GameStatus.IN_PROGRESS;
-        ai = false;
 
-        if(turn.toLowerCase().equals("x")){
+        if(turn.equalsIgnoreCase("x")){
             current_turn = false;
             x_first = true;
-        } else if(turn.toLowerCase().equals("o")){
+        } else if(turn.equalsIgnoreCase("o")){
             current_turn = true;
             x_first = false;
         } else{
@@ -225,7 +214,7 @@ public class SuperTicTacToeGame {
             return;
         }
 
-        ArrayList<int[]> plays = new ArrayList<int[]>();
+        ArrayList<int[]> plays = new ArrayList<>();
 
         for (int r = 0; r < dimension; r++) {
             for (int c = 0; c < dimension; c++) {
@@ -258,35 +247,31 @@ public class SuperTicTacToeGame {
         int col_delta = 0;
         Cell enemy = current_turn ? Cell.X : Cell.O;
 
-        switch (direction){
-            case 0: //Up
-                row_delta = -1;
-                break;
-            case 1: // Left
-                col_delta = -1;
-                break;
-            case 2: // Down
-                row_delta = 1;
-                break;
-            case 3: // Right
-                col_delta = 1;
-                break;
-            case 4: // Down right
+        switch (direction) {
+            case 0 -> //Up
+                    row_delta = -1;
+            case 1 -> // Left
+                    col_delta = -1;
+            case 2 -> // Down
+                    row_delta = 1;
+            case 3 -> // Right
+                    col_delta = 1;
+            case 4 -> { // Down right
                 row_delta = 1;
                 col_delta = 1;
-                break;
-            case 5: // Down left
+            }
+            case 5 -> { // Down left
                 row_delta = 1;
                 col_delta = -1;
-                break;
-            case 6: // Up right
+            }
+            case 6 -> { // Up right
                 row_delta = -1;
                 col_delta = 1;
-                break;
-            case 7: // Up left
+            }
+            case 7 -> { // Up left
                 row_delta = -1;
                 col_delta = -1;
-                break;
+            }
         }
 
         r += row_delta;
@@ -315,35 +300,31 @@ public class SuperTicTacToeGame {
         int col_delta = 0;
         Cell enemy = current_turn ? Cell.O : Cell.X;
 
-        switch (direction){
-            case 0: //Up
-                row_delta = -1;
-                break;
-            case 1: // Left
-                col_delta = -1;
-                break;
-            case 2: // Down
-                row_delta = 1;
-                break;
-            case 3: // Right
-                col_delta = 1;
-                break;
-            case 4: // Down right
+        switch (direction) {
+            case 0 -> //Up
+                    row_delta = -1;
+            case 1 -> // Left
+                    col_delta = -1;
+            case 2 -> // Down
+                    row_delta = 1;
+            case 3 -> // Right
+                    col_delta = 1;
+            case 4 -> { // Down right
                 row_delta = 1;
                 col_delta = 1;
-                break;
-            case 5: // Down left
+            }
+            case 5 -> { // Down left
                 row_delta = 1;
                 col_delta = -1;
-                break;
-            case 6: // Up right
+            }
+            case 6 -> { // Up right
                 row_delta = -1;
                 col_delta = 1;
-                break;
-            case 7: // Up left
+            }
+            case 7 -> { // Up left
                 row_delta = -1;
                 col_delta = -1;
-                break;
+            }
         }
 
         r += row_delta;
