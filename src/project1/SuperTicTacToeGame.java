@@ -36,6 +36,10 @@ public class SuperTicTacToeGame {
         game_status = GameStatus.IN_PROGRESS;
     }
 
+    /**
+     * Creates a new instance by copying data from an existing SuperTicTacToeGame object.
+     * @param game SuperTicTacToeGame object to copy
+     */
     public SuperTicTacToeGame(SuperTicTacToeGame game) {
         dimension = game.dimension;
         game_board = new Cell[dimension][dimension];
@@ -84,8 +88,8 @@ public class SuperTicTacToeGame {
         instantiateBoard();
     }
 
-    /*
-        Called from constructors; sets all cells in game_board to Cell.EMPTY
+    /**
+     * Sets every cell in the gameBoard to Cell.EMPTY for a new game.
      */
     private void instantiateBoard() {
         placed = 0;
@@ -97,6 +101,12 @@ public class SuperTicTacToeGame {
         }
     }
 
+    /**
+     * Plays the position row, col as the current player.
+     * @param row int Row to play
+     * @param col int Col to play
+     * @throws IllegalArgumentException if location is invalid, or the spot has been played by an AI.
+     */
     public void select(int row, int col) {
         // Argument check for valid parameters
         if (row < 0 || row > dimension || col < 0 || col > dimension) {
@@ -112,15 +122,25 @@ public class SuperTicTacToeGame {
         ++placed;
     }
 
+    /**
+     * Returns a 2-dimentional array of cells that represent the gameBoard.
+     * @return Cell[][] that represents the current game board.
+     */
     public Cell[][] getboard() {
         return game_board;
     }
 
+    /**
+     * Resets the gamebaord to prepare for a new game.
+     */
     public void reset() {
         game_status = GameStatus.IN_PROGRESS;
         instantiateBoard();
     }
 
+    /**
+     * Easy AI. Chooses a random location to play
+     */
     public void ai_choose() {
         // TODO: ai_choose()
         //  Method that analyzes board, picks best spot.
@@ -144,6 +164,7 @@ public class SuperTicTacToeGame {
     }
 
     /**
+     * Hard AI.
      * Analyzes the board for the best spot to play and will call select() with the selected location
      */
     public void justin_choose() {
