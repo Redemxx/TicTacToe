@@ -33,6 +33,7 @@ public class SuperTicTacToePanel extends JPanel {
     private JPanel button_panel;
     private JLabel playerTurn;
     private Boolean in_thread;
+    private Boolean undoing;
 
     public SuperTicTacToeGame get_game() {
         return this.game;
@@ -51,6 +52,7 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     private void instantiateInstance() {
+        undoing = false;
         in_thread = false;
         xIcon = new ImageIcon(getClass().getResource("x.png"));
         oIcon = new ImageIcon(getClass().getResource("o.png"));
@@ -230,16 +232,15 @@ public class SuperTicTacToePanel extends JPanel {
                 type = (int)
                         JOptionPane.showOptionDialog(null, message, "Choose AI",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon(),
-                                new String[]{"AI-One", "AI-Two", "AI-Three"}, "AI-ONE");
+                                new String[]{"Easy (Random)", "Hard (Analyze)"}, "Easy (Random)");
         } catch (Exception e) { // Default win length is 4 if board size is greater than 3
-            type = 4;
+            type = 2;
         }
         SuperTicTacToeGame.ai_type return_type = SuperTicTacToeGame.ai_type.NONE;
         switch (type) {
-            case 0 -> return_type = SuperTicTacToeGame.ai_type.AI_ONE;
-            case 1 -> return_type = SuperTicTacToeGame.ai_type.AI_TWO;
-            case 2 -> return_type = SuperTicTacToeGame.ai_type.AI_THREE;
-            case 3 -> return_type = SuperTicTacToeGame.ai_type.NONE;
+            case 0 -> return_type = SuperTicTacToeGame.ai_type.EASY;
+            case 1 -> return_type = SuperTicTacToeGame.ai_type.HARD;
+            case 2 -> return_type = SuperTicTacToeGame.ai_type.NONE;
         }
         return return_type;
     }
@@ -290,6 +291,9 @@ public class SuperTicTacToePanel extends JPanel {
             moves_history = new ArrayList<SuperTicTacToeGame>();
         }
 
+        if (undoing)
+            return;
+
         if (!in_thread)
             new Thread(this::checkAiPlay).start();
         else {
@@ -314,13 +318,14 @@ public class SuperTicTacToePanel extends JPanel {
             try{
                 Thread.sleep(500);
             }catch (Exception ignored) {}
-            moves_history.add(new SuperTicTacToeGame(game));
 
-            if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_ONE)
+            player = current_player ? 1 : 0;
+            if (ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE))
+                return;
+            moves_history.add(new SuperTicTacToeGame(game));
+            if (ai_states[player] == SuperTicTacToeGame.ai_type.EASY)
                 game.ai_choose();
-            else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_TWO)
-                game.connor_choose();
-            else if (ai_states[player] == SuperTicTacToeGame.ai_type.AI_THREE)
+            else if (ai_states[player] == SuperTicTacToeGame.ai_type.HARD)
                 game.justin_choose();
             current_player = !current_player;
             in_thread = true;
@@ -353,9 +358,11 @@ public class SuperTicTacToePanel extends JPanel {
         public void actionPerformed_undo(ActionEvent e) {
             if (moves_history.size() == 0)
                 return;
+            undoing = true;
             game = moves_history.get(moves_history.size()-1);
             moves_history.remove(moves_history.size()-1);
             current_player = !current_player;
+            undoing = false;
             displayBoard();
         }
 
