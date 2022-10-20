@@ -214,17 +214,6 @@ public class SuperTicTacToeGame {
         }
         **/
 
-//        // if nothing to block, picks randomly
-//        while(!foundSpot) { // not true until it finds a spot that is empty.
-//
-//            int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.
-//            int randomCol = (int) (Math.random() * (dimension)); //only get spots in the dimension of the board.
-//
-//            if (tempChoices[randomRow][randomCol] == Cell.EMPTY) { //if spot is empty in that "random position" then place a piece.
-//                select(randomRow, randomCol); //select spot!
-//                foundSpot = true; //found spot!
-//            }
-//        }
         ai_choose();
     }
 
