@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.sql.Time;
 import java.util.ArrayList;
 
+/**
+ * Class SuperTicTacToePanel extends JPanel, allowing it to create a window to display a TicTacToe
+ * game using SuperTicTacToeGame.
+ */
 public class SuperTicTacToePanel extends JPanel {
 
     /**

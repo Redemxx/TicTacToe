@@ -3,22 +3,56 @@ package project1;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**
+ * Contains the data and logic to play a game of TicTacToe. Also contains 2 different AI to play against
+ * a user in the game.
+ */
 public class SuperTicTacToeGame {
+    /**
+     * 2-dim array of Cell that contains the state of each spot on the board.
+     */
     private final Cell[][] game_board;
+    /**
+     * Int the represents the size of the game
+     */
     private final int dimension;
+    /**
+     * GameStatus game_status holds the current game status
+     */
     private GameStatus game_status;
 
     // false for player 1, X
     // true for player 2, O
+    /**
+     * Represents the current player; false: X, true: O.
+     */
     private Boolean current_turn;
+    /**
+     * Boolean to represent if X or O went first, to properly setup following games.
+     */
     private Boolean x_first;
+    /**
+     * Int tracks how many moves have been player, if equal ti dimension squared, the board is full,
+     * and it is a tie, given no player made a winning move.
+     */
     private int placed;
+    /**
+     * Int how many Cells in a row are needed to win.
+     */
     private final int win_int;
 
+    /**
+     * Returns the game size
+     * @return int Size of the game board; dimension
+     */
     public int getDimension() {
         return dimension;
     }
 
+    /**
+     * Returns the current player
+     * @return boolean current_turn.
+     */
     public boolean getTurn() {
         return current_turn;
     }
@@ -55,6 +89,7 @@ public class SuperTicTacToeGame {
             }
         }
 
+        // Sets needed vars to default
         win_int = game.win_int;
         game_status = game.game_status;
         placed = game.placed;
