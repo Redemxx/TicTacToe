@@ -158,7 +158,7 @@ public class SuperTicTacToeGame {
     }
 
     /**
-     * Returns a 2-dimentional array of cells that represent the gameBoard.
+     * Returns a 2-dimensional array of cells that represent the gameBoard.
      * @return Cell[][] that represents the current game board.
      */
     public Cell[][] getboard() {
@@ -184,7 +184,7 @@ public class SuperTicTacToeGame {
         // Calculate position..
 
         // call select(row, col);
-        boolean foundSpot = false; // created a boolean for while loop so ai can exit safely.
+        boolean foundSpot = false; // created a boolean for while loop so AI can exit safely.
 
         while(!foundSpot) { // not true until it finds a spot that is empty.
             int randomRow = (int) (Math.random() * (dimension)); //only gets spots in the dimension of the board.

@@ -115,9 +115,9 @@ public class SuperTicTacToePanel extends JPanel {
      */
     public SuperTicTacToePanel() {
         // Before instantiating a new SuperTicTacToePanel and SuperTicTacGame, we first gather inputs from the user
-        int size = getSizeInput("Enter desired size of the TicTacToe board:"); // collects size of board
-        int winLength = getWinLength("How many in a row for a win?", size); // gets win-length
-        String turn = getFirstTurn("Who starts first? X or O"); // determines who goes first
+        int size = getSizeInput(); // collects size of board
+        int winLength = getWinLength(size); // gets win-length
+        String turn = getFirstTurn(); // determines who goes first
         game = new SuperTicTacToeGame(size, turn, winLength); // creates SuperTicTacToeGame
         instantiateInstance(); // creates SuperTicTacToePanel
     }
@@ -145,7 +145,7 @@ public class SuperTicTacToePanel extends JPanel {
         buttonListener = new ButtonListener();
 
         // Move tracking
-        moves_history = new ArrayList<SuperTicTacToeGame>();
+        moves_history = new ArrayList<>();
         current_player = false;
         undoing = false;
         in_thread = false;
@@ -283,16 +283,16 @@ public class SuperTicTacToePanel extends JPanel {
     /**
      * getSizeInput creates a popup dialogue box when called allowing the user to input the size of the board.
      * Allowed inputs: [3-14].
-     * @param message is the dialogue informing the user what they are inputting.
      * @return the size of the board
      */
-    private int getSizeInput(String message) {
+    private int getSizeInput() {
         int input_size = 0;
 
         // Attempt to get size of board from user
         try {
             while (input_size <= 2 || input_size >= 15) {
-                String s = (String) JOptionPane.showInputDialog(null, message);
+                String s = JOptionPane.showInputDialog(null,
+                        "Enter desired size of the TicTacToe board:");
                 if (s == null) {
                     System.exit(0);
                 }
@@ -307,16 +307,14 @@ public class SuperTicTacToePanel extends JPanel {
     /**
      * getFirstTurn creates a popup dialogue box when called allowing the user to input who will go first.
      * Will default to player X if an invalid entry is given.
-     * @param message is the dialogue informing the user what they are inputting.
      * @return The player that goes first.
      */
-    private String getFirstTurn(String message) {
+    private String getFirstTurn() {
         String input_turn = "";
 
         // Gets first turn input from user
         try {
-            String s = (String) JOptionPane.showInputDialog(null, message);
-            input_turn = s;
+            input_turn = JOptionPane.showInputDialog(null, "Who starts first? X or O");
         } catch (Exception e) { // Default turn is X if no input or window is closed
             input_turn = "x";
         }
@@ -330,12 +328,11 @@ public class SuperTicTacToePanel extends JPanel {
      * getWinLength creates a popup dialogue box when called allowing the user to input how many
      * cells to chain in order to win. When the game is larger than 3x3, the user can only
      * choose between 4 and the board size. If a non-integer answer is given, the game will default to 4.
-     * @param message is the dialogue informing the user what they are inputting.
      * @param boardSize takes in the size of the game board to determine if win-length
-     *                 needs to be at least 4 and less than the board size.
+     *                  needs to be at least 4 and less than the board size.
      * @return The win-length to determine a win.
      */
-    private int getWinLength(String message, int boardSize) {
+    private int getWinLength(int boardSize) {
         int input_winLength = 0;
 
         // if boardSize is 3, then win length is 3 by default
@@ -344,7 +341,8 @@ public class SuperTicTacToePanel extends JPanel {
         // Gets win-length input from user
         try {
             while( input_winLength <= 3 || input_winLength > boardSize) {
-                String s = (String) JOptionPane.showInputDialog(null, message);
+                String s = JOptionPane.showInputDialog(null,
+                        "How many in a row for a win?");
                 input_winLength = Integer.parseInt(s);
             }
         } catch (Exception e) { // Default win length is 4 if board size is greater than 3
@@ -355,18 +353,16 @@ public class SuperTicTacToePanel extends JPanel {
 
     /**
      * Prompts the user to choose an AI to enable on the currently playing user. [Easy, Hard].
-     * @param message Message to display to the user.
      * @return SuperTicTacToeGame.ai_type that describes the player type. Defaults to user input
-     *          if closed or invalid entry given.
+     * if closed or invalid entry given.
      */
-    private SuperTicTacToeGame.ai_type getAiType(String message) {
+    private SuperTicTacToeGame.ai_type getAiType() {
         int type;
         // Gets win-length input from user
         try {
-                type = (int)
-                        JOptionPane.showOptionDialog(null, message, "Choose AI",
-                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon(),
-                                new String[]{"Easy (Random)", "Hard (Analyzes)"}, "Easy (Random)");
+                type = JOptionPane.showOptionDialog(null, "Choose an ai type", "Choose AI",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon(),
+                        new String[]{"Easy (Random)", "Hard (Analyzes)"}, "Easy (Random)");
         } catch (Exception e) { // Default win length is 4 if board size is greater than 3
             type = 2;
         }
@@ -374,7 +370,8 @@ public class SuperTicTacToePanel extends JPanel {
         switch (type) {
             case 0 -> return_type = SuperTicTacToeGame.ai_type.EASY;
             case 1 -> return_type = SuperTicTacToeGame.ai_type.HARD;
-            case 2 -> return_type = SuperTicTacToeGame.ai_type.NONE;
+            case 2 -> {
+            }
         }
         return return_type;
     }
@@ -427,7 +424,7 @@ public class SuperTicTacToePanel extends JPanel {
             ai_states = new SuperTicTacToeGame.ai_type[] {SuperTicTacToeGame.ai_type.NONE,
                     SuperTicTacToeGame.ai_type.NONE};
             displayBoard();
-            moves_history = new ArrayList<SuperTicTacToeGame>();
+            moves_history = new ArrayList<>();
         }
 
         // Safety check to prevent AI from running when undoing moves.
@@ -550,7 +547,7 @@ public class SuperTicTacToePanel extends JPanel {
             // Checks if the current player is already an AI, returns if so.
             if (ai_states[player] != SuperTicTacToeGame.ai_type.NONE)
                 return;
-            SuperTicTacToeGame.ai_type type = getAiType("Choose an ai type");
+            SuperTicTacToeGame.ai_type type = getAiType();
 
             // Sets the current player to the returned ai_type
             if (current_player) {
