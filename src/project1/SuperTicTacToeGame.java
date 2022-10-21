@@ -165,7 +165,8 @@ public class SuperTicTacToeGame {
 
     /**
      * Hard AI.
-     * Analyzes the board for the best spot to play and will call select() with the selected location
+     * Analyzes the board for the best spot to play and will call select() with the selected location.
+     * Works best on larger boards.
      */
     public void justin_choose() {
         int[][] board_weight = new int[dimension][dimension];

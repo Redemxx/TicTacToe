@@ -11,36 +11,105 @@ import java.util.ArrayList;
 
 public class SuperTicTacToePanel extends JPanel {
 
+    /**
+     * SuperTicTacToeGame game.
+     */
     private SuperTicTacToeGame game;
+    /**
+     * Represents the current player.
+     */
     private boolean current_player;
+    /**
+     * SuperTicTacToeGame.ai_type[] of length 2 that represent the player type.
+     */
     private SuperTicTacToeGame.ai_type[] ai_states;
+    /**
+     * ArrayList of SuperTicTacToeGame to hold all move history for the current game.
+     */
     private ArrayList<SuperTicTacToeGame> moves_history;
+    /**
+     * Main JPanel object; gui
+     */
     private JFrame gui;
+    /**
+     * Stores 2-dim array of JButtons to construct grid for the game.
+     */
     private JButton[][] jButtonsBoard;
+    /**
+     * Button for handling undo inputs
+     */
     private JButton undo;
+    /**
+     * Button for handling enabling AI
+     */
     private JButton enable_ai;
+    /**
+     * 2-dim array of Cells to represent the current game board.
+     */
     private Cell[][] cells;
+    /**
+     * Creates an instance of ButtonListener to assign as an actionListener to the JButtons.
+     */
     private ButtonListener buttonListener;
+    /**
+     * Holds the X icon to assign to JButtons the X player plays.
+     */
     private ImageIcon xIcon;
+    /**
+     * Holds the O icon to assign to JButtons the O player plays.
+     */
     private ImageIcon oIcon;
+    /**
+     * Emtpy icon to display in empty cells
+     */
     private ImageIcon emptyIcon;
+    /**
+     * JMenu to hold file menu options quit, undo, and resize board.
+     */
     private JMenu fileMenu;
-    private JMenuBar menuBar = new JMenuBar();
+    /**
+     * Quit button for JMenu
+     */
     private JMenuItem quitItem;
-    private JMenuItem undoItem; //Create keyboard shortcut?
+    /**
+     * Undo button for JMenu
+     */
+    private JMenuItem undoItem;
+    /**
+     * Change Size button for JMenu
+     */
     private JMenuItem changeSizeItem;
+    /**
+     * JPanel that contains the JButtons that represent the GameBoard.
+     */
     private JPanel game_panel;
+    /**
+     * JPanel that contains actions buttons undo, enable AI, and the JLabel playerTurn.
+     */
     private JPanel button_panel;
+    /**
+     * JLabel that displays the current player.
+     */
     private JLabel playerTurn;
+    /**
+     * Boolean that is true then the program is currently running in a spawned thread.
+     */
     private Boolean in_thread;
+    /**
+     * Boolean to notify spawned threads to quit if possible because the user is undoing a move.
+     */
     private Boolean undoing;
 
+    /**
+     * Returns the game object
+     * @return SuperTicTacToeGame object
+     */
     public SuperTicTacToeGame get_game() {
         return this.game;
     }
 
     /**
-     * SuperTicTacToePanel collects the information needed
+     * SuperTicTacToePanel constructor; collects the information needed
      * to instantiate all non-predetermined variables
      */
     public SuperTicTacToePanel() {
@@ -52,6 +121,10 @@ public class SuperTicTacToePanel extends JPanel {
         instantiateInstance(); // creates SuperTicTacToePanel
     }
 
+    /**
+     * SuperTicTacToePanel constructor; creates a new panel using a TicTacToeGame object.
+     * @param game SuperTicTacToeGame to use.
+     */
     public SuperTicTacToePanel(SuperTicTacToeGame game) {
         this.game = game;
         instantiateInstance();
@@ -59,19 +132,27 @@ public class SuperTicTacToePanel extends JPanel {
 
     /**
      * instantiateInstance creates and displays the main JFrame holding the
-     * game board JPanel, file menu, and other JPanel which holds the buttons
+     * game board JPanel, file menu, and other JPanel which holds the buttons.
+     * Also sets the value of needed runtime variables used by the class.
      */
     private void instantiateInstance() {
-        undoing = false;
-        in_thread = false;
+
+        // Creates icons for each player
         xIcon = new ImageIcon(getClass().getResource("x.png"));
         oIcon = new ImageIcon(getClass().getResource("o.png"));
         emptyIcon = new ImageIcon();
         buttonListener = new ButtonListener();
 
+        // Move tracking
         moves_history = new ArrayList<SuperTicTacToeGame>();
         current_player = false;
+        undoing = false;
+        in_thread = false;
 
+        // Sets the default states of the players to be controlled by a user
+        ai_states = new SuperTicTacToeGame.ai_type[] {SuperTicTacToeGame.ai_type.NONE, SuperTicTacToeGame.ai_type.NONE};
+
+        // Creates GUI
         gui = new JFrame("Super Tic-Tac-Toe");
         gui.setLayout(new GridBagLayout());
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -123,6 +204,7 @@ public class SuperTicTacToePanel extends JPanel {
         button_panel.add(enable_ai);
         button_panel.add(playerTurn);
 
+        // Creates the jButtonsBoard
         int s = game.getDimension();
         jButtonsBoard = new JButton[s][s];
 
@@ -134,6 +216,7 @@ public class SuperTicTacToePanel extends JPanel {
         int bottom = 0;
         int right = 0;
 
+        // Sets the size of the boarders of the JButtons to scale properly with grid size.
         int border_width = (int) (6 - (game.getDimension() - 3 ) * 0.25);
 
         // creates the array of JButtons to hold X's and O's and sets a button border depending
@@ -194,12 +277,12 @@ public class SuperTicTacToePanel extends JPanel {
         gui.setSize(610, 560);
         gui.setJMenuBar(menus);
         gui.setVisible(true);
-
-        ai_states = new SuperTicTacToeGame.ai_type[] {SuperTicTacToeGame.ai_type.NONE, SuperTicTacToeGame.ai_type.NONE};
     }
+
     /**
-     * getSizeInput creates a popup dialogue box when called allowing the user to input the size of the board
-     * @param message is the dialogue informing the user what they are inputting
+     * getSizeInput creates a popup dialogue box when called allowing the user to input the size of the board.
+     * Allowed inputs: [3-14].
+     * @param message is the dialogue informing the user what they are inputting.
      * @return the size of the board
      */
     private int getSizeInput(String message) {
@@ -221,9 +304,10 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     /**
-     * getFirstTurn creates a popup dialogue box when called allowing the user to input who will go first
-     * @param message is the dialogue informing the user what they are inputting
-     * @return the player that goes first
+     * getFirstTurn creates a popup dialogue box when called allowing the user to input who will go first.
+     * Will default to player X if an invalid entry is given.
+     * @param message is the dialogue informing the user what they are inputting.
+     * @return The player that goes first.
      */
     private String getFirstTurn(String message) {
         String input_turn = "";
@@ -242,11 +326,13 @@ public class SuperTicTacToePanel extends JPanel {
     }
 
     /**
-     * getWinLength creates a popup dialogue box when called allowing the user to input who will go first
-     * @param message is the dialogue informing the user what they are inputting
+     * getWinLength creates a popup dialogue box when called allowing the user to input how many
+     * cells to chain in order to win. When the game is larger than 3x3, the user can only
+     * choose between 4 and the board size. If a non-integer answer is given, the game will default to 4.
+     * @param message is the dialogue informing the user what they are inputting.
      * @param boardSize takes in the size of the game board to determine if win-length
-     *                 needs to be greater than the default win-length of 3
-     * @return the win-length our game will use
+     *                 needs to be at least 4 and less than the board size.
+     * @return The win-length to determine a win.
      */
     private int getWinLength(String message, int boardSize) {
         int input_winLength = 0;
@@ -266,6 +352,12 @@ public class SuperTicTacToePanel extends JPanel {
         return input_winLength;
     }
 
+    /**
+     * Prompts the user to choose an AI to enable on the currently playing user. [Easy, Hard].
+     * @param message Message to display to the user.
+     * @return SuperTicTacToeGame.ai_type that describes the player type. Defaults to user input
+     *          if closed or invalid entry given.
+     */
     private SuperTicTacToeGame.ai_type getAiType(String message) {
         int type;
         // Gets win-length input from user
@@ -286,7 +378,10 @@ public class SuperTicTacToePanel extends JPanel {
         return return_type;
     }
 
-     // whenever called, displayBoard updates the elements in our game_board and checks for a win
+    /**
+     * Updates all graphics on the JPanel gui. Checks if an AI needs to play for the next turn.
+     * Calls getGameStatus of game when ran. If the game is finished, it will notify the user and reset the game.
+     */
     private void displayBoard() {
         cells = game.getboard();
 
@@ -323,6 +418,7 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
+        // Checks the status of the game and resets if finished.
         GameStatus gameStatus = game.getGameStatus();
         if (gameStatus != GameStatus.IN_PROGRESS) {
             showStatus(gameStatus);
@@ -333,9 +429,16 @@ public class SuperTicTacToePanel extends JPanel {
             moves_history = new ArrayList<SuperTicTacToeGame>();
         }
 
+        // Safety check to prevent AI from running when undoing moves.
         if (undoing)
             return;
 
+        /* Checks if the call is currently in a thread or not. Checks if an AI needs to play the next turn.
+        *  I needed to use threads because the board would not update graphically until after the AI plays causing
+        *  an unsatisfying instant placing effect during gameplay. The thread is only necessary once after
+        *  the actionPerformed call, therefor in implemented a simple check as I imagine spawning hundreds
+        *  of threads is not very good for performance.
+        */
         if (!in_thread)
             new Thread(this::checkAiPlay).start();
         else {
@@ -344,39 +447,59 @@ public class SuperTicTacToePanel extends JPanel {
         }
     }
 
-    private void showStatus(GameStatus statuus) {
-        if (statuus == GameStatus.O_WON) {
+    /**
+     * Helper method that displays a JOptionPane notifying the user of the end of a game and the winner.
+     * @param status GameStatus to report to the user.
+     */
+    private void showStatus(GameStatus status) {
+        if (status == GameStatus.O_WON) {
             JOptionPane.showMessageDialog(null, "Player O won!");
-        } else if (statuus == GameStatus.X_WON) {
+        } else if (status == GameStatus.X_WON) {
             JOptionPane.showMessageDialog(null, "Player X won!");
-        }else if (statuus == GameStatus.CATS) {
+        }else if (status == GameStatus.CATS) {
             JOptionPane.showMessageDialog(null, "No winners, it's a Tie!");
         }
     }
 
+    /**
+     * Checks if the next player is an AI, calls the appropriate AI method if so.
+     */
     private void checkAiPlay() {
         int player = current_player ? 1 : 0;
         if (!ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE)) {
+            // Adds delay to AI to feel more like a player.
             try{
                 Thread.sleep(500);
-            }catch (Exception ignored) {}
+            }catch (Exception ignored) {} // Ignores exception as this is only to cause a delay for the user.
 
             player = current_player ? 1 : 0;
+
+            // If the player is a user, exit
             if (ai_states[player].equals(SuperTicTacToeGame.ai_type.NONE))
                 return;
+
+            // Player is not user, so add current game to the moves history and call appropriate
+            // AI method.
             moves_history.add(new SuperTicTacToeGame(game));
             if (ai_states[player] == SuperTicTacToeGame.ai_type.EASY)
                 game.ai_choose();
             else if (ai_states[player] == SuperTicTacToeGame.ai_type.HARD)
                 game.justin_choose();
+
+            // Re-display board
             current_player = !current_player;
             in_thread = true;
             displayBoard();
         }
     }
 
+    /**
+     * Acts as the router for the GUI's buttons. Has 5 'actionPerformed' functions
+     * to handle player moves, undos, quit, AI, and changing the board size.
+     */
     private class ButtonListener implements ActionListener {
 
+        // Used for processing player input to place a Tac (X) or Toe (O).
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton)e.getSource();
@@ -401,6 +524,7 @@ public class SuperTicTacToePanel extends JPanel {
             }
         }
 
+        // Processes user request to undo a move
         public void actionPerformed_undo(ActionEvent e) {
             if (moves_history.size() == 0)
                 return;
@@ -412,26 +536,34 @@ public class SuperTicTacToePanel extends JPanel {
             displayBoard();
         }
 
+        // Quits the program
         public void actionPerformed_quit(ActionEvent e) {
             // ActionListener for QUIT button
             System.exit(0);
         }
 
+        // ActionListener for ENABLE AI button
         public void actionPerformed_enableai(ActionEvent e) {
-            // ActionListener for ENABLE AI button
             int player = current_player ? 1 : 0;
+
+            // Checks if the current player is already an AI, returns if so.
             if (ai_states[player] != SuperTicTacToeGame.ai_type.NONE)
                 return;
             SuperTicTacToeGame.ai_type type = getAiType("Choose an ai type");
 
+            // Sets the current player to the returned ai_type
             if (current_player) {
                 ai_states[1] = type;
             }else{
                 ai_states[0] = type;
             }
 
+            // Calls displayBoard to prompt set AI to play
             displayBoard();
         }
+
+        // Prompts the user to configure a new game, allowing them to change the size
+        // and winning length.
         public void actionPerformed_size(ActionEvent e) {
             // ActionListener for changing board size
             gui.dispose(); // closes last game
